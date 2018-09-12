@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs.recruit.dao.InterviewDao">
+    <resultMap id="BaseMap" type="com.cs.recruit.entity.Base">
+        <id property="base_id" column="base_id"/>
+        <result property="rale_name" column="rale_name"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="haw" column="haw"/>
+        <result property="nation" column="nation"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="language" column="language"/>
+        <result property="job" column="job"/>
+        <result property="idcard" column="idcard"/>
+        <result property="certificate" column="certificate"/>
+        <result property="address" column="address"/>
+        <result property="friend" column="friend"/>
+        <result property="hobby" column="hobby"/>
+        <result property="contact_name" column="contact_name"/>
+        <result property="contact_phone" column="contact_phone"/>
+        <result property="user_id" column="user_id"/>
+        <result property="dept_id" column="dept_id"/>
+    </resultMap>
+    <resultMap id="Details" type="com.cs.recruit.dto.DetailsDto">
+        <!--基本信息-->
+        <id property="base_id" column="base_id"/>
+        <result property="rele_name" column="rale_name"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="haw" column="haw"/>
+        <result property="nation" column="nation"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="language" column="language"/>
+        <result property="job" column="job"/>
+        <result property="idcard" column="idcard"/>
+        <result property="certificate" column="certificate"/>
+        <result property="address" column="address"/>
+        <result property="friend" column="friend"/>
+        <result property="hobby" column="hobby"/>
+        <result property="contact_name" column="contact_name"/>
+        <result property="contact_phone" column="contact_phone"/>
+        <association property="applyDto" javaType="com.cs.recruit.dto.ApplyDto">
+            <id property="apply_id" column="apply_id"/>
+            <result property="post" column="post"/>
+            <result property="money" column="money"/>
+            <result property="formdate" column="formdate"/>
+            <result property="comedate" column="comedate"/>
+        </association>
+        <collection property="teachDtoList" ofType="TeachDto">
+            <id property="teach_id" column="teach_id"/>
+            <result property="begandend" column="begandend"/>
+            <result property="schoole" column="schoole"/>
+            <result property="major" column="major"/>
+            <result property="record" column="record"/>
+        </collection>
+        <collection property="workDtoList" ofType="WorkDto">
+            <id property="work_id" column="work_id"/>
+            <result property="begandend" column="begandend"/>
+            <result property="comname" column="comname"/>
+            <result property="peoplenum" column="peoplenum"/>
+            <result property="money" column="money"/>
+            <result property="why" column="why"/>
+            <result property="witness" column="witness"/>
+        </collection>
+        <collection property="familyDtoList" ofType="FamilyDto">
+            <id property="family_id" column="family_id"/>
+            <result property="status" column="status"/>
+            <result property="relay" column="relay"/>
+            <result property="name" column="name"/>
+            <result property="address" column="address"/>
+            <result property="post" column="post"/>
+            <result property="phone" column="phone"/>
+        </collection>
+    </resultMap>
+    <resultMap id="EI" type="com.cs.recruit.entity.Personality_EI">
+        <id property="EI_id" column="EI_id"/>
+        <result property="EI_num" column="EI_num"/>
+        <result property="EI_name" column="EI_name"/>
+        <result property="EI_a" column="EI_a"/>
+        <result property="EI_b" column="EI_b"/>
+    </resultMap>
+    <resultMap id="JP" type="com.cs.recruit.entity.Personality_JP">
+        <id property="JP_id" column="JP_id"/>
+        <result property="JP_num" column="JP_num"/>
+        <result property="JP_name" column="JP_name"/>
+        <result property="JP_a" column="JP_a"/>
+        <result property="JP_b" column="JP_b"/>
+    </resultMap>
+    <resultMap id="SN" type="com.cs.recruit.entity.Personality_SN">
+        <id property="SN_id" column="SN_id"/>
+        <result property="SN_num" column="SN_num"/>
+        <result property="SN_name" column="SN_name"/>
+        <result property="SN_a" column="SN_a"/>
+        <result property="SN_b" column="SN_b"/>
+    </resultMap>
+    <resultMap id="TF" type="com.cs.recruit.entity.Personality_TF">
+        <id property="TF_id" column="TF_id"/>
+        <result property="TF_num" column="TF_num"/>
+        <result property="TF_name" column="TF_name"/>
+        <result property="TF_a" column="TF_a"/>
+        <result property="TF_b" column="TF_b"/>
+    </resultMap>
+<!--打开简历-->
+    <!--查询是否填写过-->
+    <select id="selectApply" parameterType="String" resultType="com.cs.recruit.entity.Apply">
+        SELECT * FROM apply_form WHERE user_id = #{user_id}
+    </select>
+    <insert id="insertIntoApply" parameterType="com.cs.recruit.entity.Apply">
+        INSERT INTO apply_form(apply_id, user_id, post, money, formdate, comedate) VALUES (#{apply_id},#{user_id},#{post},#{money},#{formdate},#{comedate});
+    </insert>
+    <update id="updateApply" parameterType="com.cs.recruit.entity.Apply">
+        UPDATE apply_form SET apply_form.post = #{post},apply_form.money = #{money}
+                             ,apply_form.formdate = #{formdate},apply_form.comedate = #{comedate}
+        WHERE user_id = #{user_id}
+    </update>
+    <select id="selectBase" parameterType="String" resultMap="BaseMap">
+        SELECT * FROM recruit_base WHERE recruit_base.user_id = #{user_id}
+    </select>
+    <insert id="insertIntoBase" parameterType="com.cs.recruit.entity.Base">
+        INSERT INTO recruit_base VALUES (#{base_id},#{rale_name},#{sex},#{birthday},#{haw},#{nation},#{phone},#{email},#{language},
+                                         #{job},#{idcard},#{certificate},#{address},#{friend},#{hobby},#{contact_name},
+                                         #{contact_phone},#{user_id},#{dept_id})
+    </insert>
+    <update id="updateBase" parameterType="com.cs.recruit.entity.Base">
+        UPDATE recruit_base SET rale_name = #{rale_name},sex=#{sex},birthday=#{birthday},haw=#{haw},nation=#{nation},phone=#{phone},
+                                email=#{email},language=#{language},job=#{job},idcard=#{idcard},certificate=#{certificate},address=#{address}
+                              , friend=#{friend},hobby=#{hobby},contact_name=#{contact_name},contact_phone=#{contact_phone}
+        WHERE user_id = #{user_id}
+    </update>
+    <resultMap id="teachMap" type="com.cs.recruit.entity.Teach">
+        <id property="teach_id" column="teach_id"/>
+        <result property="begandend" column="begandend"/>
+        <result property="schoole" column="schoole"/>
+        <result property="major" column="major"/>
+        <result property="record" column="record"/>
+        <result property="user_id" column="user_id"/>
+    </resultMap>
+    <select id="selectTeach" parameterType="String" resultMap="teachMap">
+        SELECT * FROM teach WHERE user_id=#{user_id}
+    </select>
+    <delete id="deleteTeach" parameterType="String">
+        DELETE FROM teach WHERE user_id=#{user_id}
+    </delete>
+    <insert id="insertIntoTeach" parameterType="com.cs.recruit.entity.Teach">
+        INSERT INTO teach VALUES (#{teach_id},#{begandend},#{schoole},#{major},#{record},#{user_id})
+    </insert>
+    <update id="updateTeach" parameterType="com.cs.recruit.entity.Teach">
+        UPDATE teach SET begandend=#{begandend},schoole=#{schoole},major=#{major},record=#{record}
+        WHERE teach_id = #{teach_id}
+    </update>
+    <resultMap id="workMap" type="com.cs.recruit.entity.Work">
+        <id property="work_id" column="work_id"/>
+        <result property="begandend" column="begandend"/>
+        <result property="comname" column="comname"/>
+        <result property="peoplenum" column="peoplenum"/>
+        <result property="money" column="money"/>
+        <result property="why" column="why"/>
+        <result property="witness" column="witness"/>
+        <result property="user_id" column="user_id"/>
+    </resultMap>
+    <select id="selectWork" parameterType="String" resultMap="workMap">
+        SELECT * FROM work WHERE user_id = #{user_id}
+    </select>
+    <insert id="insertIntoWork" parameterType="com.cs.recruit.entity.Work">
+        INSERT INTO work VALUES (#{work_id},#{begandend},#{comname},#{peoplenum},#{post},#{money},#{why},#{witness},#{user_id})
+    </insert>
+    <update id="updateWork" parameterType="com.cs.recruit.entity.Work">
+        UPDATE work SET begandend=#{begandend},comname=#{comname},peoplenum=#{peoplenum},post=#{post},money=#{money},why=#{why},witness=#{witness}
+        WHERE work_id = #{work_id}
+    </update>
+    <delete id="deleteWork" parameterType="String">
+        DELETE FROM work WHERE user_id=#{user_id}
+    </delete>
+    <resultMap id="familyMap" type="com.cs.recruit.entity.Family">
+        <id property="family_id" column="family_id"/>
+        <result property="status" column="status"/>
+        <result property="relay" column="relay"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="post" column="post"/>
+        <result property="phone" column="phone"/>
+        <result property="user_id" column="user_id"/>
+    </resultMap>
+    <select id="selectFamily" parameterType="String" resultMap="familyMap">
+        SELECT * FROM family WHERE user_id = #{user_id}
+    </select>
+    <insert id="insertIntoFamily" parameterType="com.cs.recruit.entity.Family">
+        INSERT INTO family VALUES (#{family_id},#{status},#{relay},#{name},#{address},#{post},#{phone},#{user_id});
+    </insert>
+    <update id="updateFamily" parameterType="com.cs.recruit.entity.Family">
+        UPDATE family SET status=#{status},relay=#{relay},name=#{name},address=#{address},post=#{post},phone=#{phone}
+        WHERE family_id = #{family_id}
+    </update>
+    <delete id="deleteFamily" parameterType="String">
+        DELETE FROM family WHERE user_id=#{user_id}
+    </delete>
+ <!--打开笔试题-->
+    <!--查询是否做过笔试题-->
+    <select id="findPost" parameterType="String" resultType="String">
+        SELECT post FROM apply_form WHERE user_id = #{user_id}
+    </select>
+   <select id="findAssistentWrite" parameterType="String" resultType="com.cs.recruit.entity.Assistent_answer">
+       SELECT * FROM assistent_answer WHERE user_id = #{user_id}
+   </select>
+    <insert id="insertInotAss" parameterType="com.cs.recruit.entity.Assistent_answer">
+        INSERT INTO assistent_answer VALUES (#{assans_id},#{user_id},#{first_ans},#{second_ans},#{third_ans})
+    </insert>
+    <update id="updateAss" parameterType="com.cs.recruit.entity.Assistent_answer">
+        UPDATE assistent_answer
+        <trim prefix="set" suffixOverrides=",">
+            <if test="first_ans!=null">first_ans=#{first_ans},</if>
+            <if test="second_ans!=null">second_ans=#{second_ans},</if>
+            <if test="third_ans!=null">third_ans=#{third_ans},</if>
+        </trim>
+        WHERE user_id=#{user_id}
+    </update>
+
+
+    <select id="findOtherWrite" parameterType="String" resultType="com.cs.recruit.entity.Other_answer">
+        SELECT * FROM other_answer WHERE user_id = #{user_id}
+    </select>
+    <insert id="insertInotOther" parameterType="com.cs.recruit.entity.Other_answer">
+        INSERT INTO other_answer VALUES (#{othans_id},#{user_id},#{first_ans},#{second_ans})
+    </insert>
+    <update id="updateOther" parameterType="com.cs.recruit.entity.Other_answer">
+        UPDATE other_answer
+        <trim prefix="set" suffixOverrides=",">
+            <if test="first_ans!=null">first_ans=#{first_ans},</if>
+            <if test="second_ans!=null">second_ans=#{second_ans},</if>
+        </trim>
+        WHERE user_id = #{user_id}
+    </update>
+
+
+    <select id="findSaleWrite" parameterType="String" resultType="com.cs.recruit.entity.Sale_answer">
+        SELECT * FROM sale_answer
+        WHERE user_id = #{user_id}
+    </select>
+    <insert id="insertInotSale" parameterType="com.cs.recruit.entity.Sale_answer">
+        INSERT INTO sale_answer VALUES (#{saleans_id},#{user_id},#{first_ans},#{second_ans},#{third_ans},#{fourth_ans})
+    </insert>
+    <update id="updateSale" parameterType="com.cs.recruit.entity.Sale_answer">
+        UPDATE sale_answer
+        <trim prefix="set" suffixOverrides=",">
+            <if test="first_ans!=null">first_ans=#{first_ans},</if>
+            <if test="second_ans!=null">second_ans=#{second_ans},</if>
+            <if test="third_ans!=null">third_ans=#{third_ans},</if>
+            <if test="fourth_ans!=null">fourth_ans=#{fourth_ans}</if>
+        </trim>
+        WHERE user_id = #{user_id}
+    </update>
+    <!--打开性格测试-->
+    <!--查看性格测试-->
+    <select id="findCharacter" parameterType="String" resultType="com.cs.recruit.dto.CharacterWriteDto">
+        SELECT personality_sn_ans.*,personality_jp_ans.*,personality_ei_ans.*,personality_tf_ans.*
+        FROM personality_tf_ans,personality_ei_ans,personality_jp_ans,personality_sn_ans
+        WHERE personality_sn_ans.user_id = #{user_id}
+        AND  personality_jp_ans.user_id = #{user_id}
+        AND  personality_ei_ans.user_id = #{user_id}
+        AND  personality_tf_ans.user_id = #{user_id}
+    </select>
+    <insert id="insertIntoJP" parameterType="com.cs.recruit.entity.Personality_JP_ans">
+        INSERT INTO personality_jp_ans VALUES (#{JP_ans_id},#{JP_id},#{JP_num},#{JP_a_ans},#{JP_b_ans},#{user_id})
+    </insert>
+    <insert id="insertIntoEI" parameterType="com.cs.recruit.entity.Personality_EI_ans">
+        INSERT INTO personality_ei_ans VALUES (#{EI_ans_id},#{EI_id},#{EI_num},#{EI_a_ans},#{EI_b_ans},#{user_id})
+    </insert>
+    <insert id="insertIntoSN" parameterType="com.cs.recruit.entity.Personality_SN_ans">
+        INSERT INTO personality_sn_ans VALUES (#{SN_ans_id},#{SN_id},#{SN_num},#{SN_a_ans},#{SN_b_ans},#{user_id})
+    </insert>
+    <insert id="insertIntoTF" parameterType="com.cs.recruit.entity.Personality_TF_ans">
+        INSERT INTO personality_tf_ans VALUES (#{TF_ans_id},#{TF_id},#{TF_num},#{TF_a_ans},#{TF_b_ans},#{user_id})
+    </insert>
+    <update id="updateJP" parameterType="com.cs.recruit.entity.Personality_JP_ans" >
+        UPDATE personality_jp_ans SET JP_a_ans = #{JP_a_ans},JP_b_ans = #{JP_b_ans}
+        WHERE personality_jp_ans.user_id = #{user_id}
+    </update>
+    <update id="updateEI" parameterType="com.cs.recruit.entity.Personality_EI_ans" >
+        UPDATE personality_ei_ans SET EI_a_ans = #{EI_a_ans},EI_b_ans = #{EI_b_ans}
+        WHERE personality_ei_ans.user_id = #{user_id}
+    </update>
+    <update id="updateSN" parameterType="com.cs.recruit.entity.Personality_SN_ans" >
+        UPDATE personality_sn_ans SET SN_a_ans = #{SN_a_ans},SN_b_ans = #{SN_b_ans}
+        WHERE personality_sn_ans.user_id = #{user_id}
+    </update>
+    <update id="updateTF" parameterType="com.cs.recruit.entity.Personality_TF_ans" >
+        UPDATE personality_tf_ans SET TF_a_ans = #{TF_a_ans},TF_b_ans = #{TF_b_ans}
+        WHERE personality_tf_ans.user_id = #{user_id}
+    </update>
+    <!--查询题目-->
+    <select id="findEI" resultMap="EI">
+        SELECT * FROM personality_ei;
+    </select>
+    <select id="findJP" resultMap="JP">
+        SELECT * FROM personality_jp;
+    </select>
+    <select id="findTF" resultMap="TF">
+        SELECT * FROM personality_tf
+    </select>
+    <select id="findSN" resultMap="SN">
+        SELECT * FROM personality_sn
+    </select>
+    <!--查询其他职位题目-->
+    <select id="findOtherSubject" resultType="com.cs.recruit.entity.Other_subject">
+        SELECT * FROM other_subject;
+    </select>
+    <select id="findSaleSubject" resultType="com.cs.recruit.entity.Sale_subject">
+        SELECT * FROM sale_subject;
+    </select>
+    <select id="findAssSubject" resultType="com.cs.recruit.entity.Assistent_subject">
+        SELECT * FROM assistent_subject
+    </select>
+    <!--e总分-->
+    <select id="SumE" parameterType="String" resultType="String">
+        SELECT sum(EI_a_ans) FROM personality_ei_ans WHERE user_id=#{user_id}
+    </select>
+    <!--i总分-->
+    <select id="SumI" parameterType="String" resultType="String">
+        SELECT sum(EI_b_ans) FROM personality_ei_ans WHERE user_id=#{user_id}
+    </select>
+    <!--j总分-->
+    <select id="SumJ" parameterType="String" resultType="String">
+        SELECT sum(JP_a_ans) FROM personality_jp_ans WHERE user_id=#{user_id}
+    </select>
+    <!--p总分-->
+    <select id="SumP" parameterType="String" resultType="String">
+        SELECT sum(JP_b_ans) FROM personality_jp_ans WHERE user_id=#{user_id}
+    </select>
+    <!--s总分-->
+    <select id="SumS" parameterType="String" resultType="String">
+        SELECT sum(SN_a_ans) FROM personality_sn_ans WHERE user_id=#{user_id}
+    </select>
+    <!--n总分-->
+    <select id="SumN" parameterType="String" resultType="String">
+        SELECT sum(SN_b_ans) FROM personality_sn_ans WHERE user_id=#{user_id}
+    </select>
+    <!--t总分-->
+    <select id="SumT" parameterType="String" resultType="String">
+        SELECT sum(TF_a_ans) FROM personality_tf_ans WHERE user_id=#{user_id}
+    </select>
+    <!--f总分-->
+    <select id="SumF" parameterType="String" resultType="String">
+        SELECT sum(TF_b_ans) FROM personality_tf_ans WHERE user_id=#{user_id}
+    </select>
+    <insert id="insertIntoFace" parameterType="com.cs.recruit.entity.Face">
+        INSERT INTO face VALUES (#{face_id},#{user_id},#{eori},#{sorn},#{torf},#{jorp},#{sum},#{result})
+    </insert>
+    <insert id="insertResult" parameterType="com.cs.recruit.entity.Result">
+        INSERT INTO recruit_result VALUES (#{result_id},#{e_sum},#{i_sum}
+        ,#{s_sum},#{n_sum},#{j_sum},#{p_sum},#{t_sum},#{f_sum},#{result_type},#{user_id})
+    </insert>
+    <select id="selectResult" parameterType="String" resultType="com.cs.recruit.entity.Result">
+        SELECT * FROM recruit_result WHERE user_id=#{user_id}
+    </select>
+</mapper>

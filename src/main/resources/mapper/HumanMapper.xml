@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs.recruit.dao.HumanDao">
+    <!--查看应聘相应职位的面试者待录取-->
+    <resultMap id="listDtoMap" type="com.cs.recruit.dto.listDto">
+        <id property="user_id" column="user_id"/>
+        <result property="rale_name" column="rale_name"/>
+        <result property="user_status" column="user_status"/>
+        <result property="post" column="post"/>
+        <result property="phone" column="phone"/>
+        <result property="formdate" column="formdate"/>
+    </resultMap>
+    <resultMap id="EvaluateDtoMap" type="com.cs.recruit.dto.EvaluateDto">
+        <id property="evaluate_id" column="evaluate_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="rale_name" column="rale_name"/>
+        <result property="dept_id" column="dept_id"/>
+        <result property="post" column="post"/>
+        <result property="firsttry_id" column="firsttry_id"/>
+        <result property="first_colligate_text" column="first_colligate_text"/>
+        <result property="first_colligate" column="first_colligate"/>
+        <result property="secondtry_id" column="secondtry_id"/>
+        <result property="second_colligate_text" column="second_colligate_text"/>
+        <result property="second_colligate" column="second_colligate"/>
+        <result property="employ_id" column="employ_id"/>
+        <result property="colligate_text" column="colligate_text"/>
+        <result property="colligate" column="colligate"/>
+        <result property="manager_text" column="manager_text"/>
+        <result property="manager" column="manager"/>
+    </resultMap>
+    <!--查看面试评价表-->
+    <select id="findEvaluate" parameterType="String" resultMap="EvaluateDtoMap">
+        SELECT recruit_evaluate.evaluate_id,recruit_evaluate.user_id,recruit_evaluate.dept_id,recruit_evaluate.post,recruit_evaluate.rale_name,
+            first_try.firsttry_id,first_try.first_colligate,first_try.first_colligate_text,
+            second_try.secondtry_id,second_try.second_colligate,second_try.second_colligate_text,
+            employ.employ_id,employ.colligate,employ.colligate_text,employ.manager,employ.manager_text
+        FROM recruit_evaluate,first_try,second_try,employ
+        WHERE first_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id=#{user_id})
+        AND   second_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id=#{user_id})
+        AND   employ.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id=#{user_id})
+        AND recruit_evaluate.user_id = #{user_id}
+    </select>
+    <!-- 查看面试者详情待录取-->
+    <resultMap id="Details" type="com.cs.recruit.dto.DetailsDto">
+        <!--基本信息-->
+        <id property="base_id" column="base_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="rale_name" column="rale_name"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="haw" column="haw"/>
+        <result property="nation" column="nation"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="language" column="language"/>
+        <result property="job" column="job"/>
+        <result property="idcard" column="idcard"/>
+        <result property="certificate" column="certificate"/>
+        <result property="address" column="address"/>
+        <result property="friend" column="friend"/>
+        <result property="hobby" column="hobby"/>
+        <result property="contact_name" column="contact_name"/>
+        <result property="contact_phone" column="contact_phone"/>
+        <association property="applyDto" javaType="com.cs.recruit.dto.ApplyDto">
+            <id property="apply_id" column="apply_id"/>
+            <result property="post" column="post"/>
+            <result property="money" column="money"/>
+            <result property="formdate" column="formdate"/>
+            <result property="comedate" column="comedate"/>
+        </association>
+        <collection property="teachDtoList" ofType="TeachDto">
+            <id property="teach_id" column="teach_id"/>
+            <result property="begandend" column="begandend"/>
+            <result property="schoole" column="schoole"/>
+            <result property="major" column="major"/>
+            <result property="record" column="record"/>
+        </collection>
+        <collection property="workDtoList" ofType="WorkDto">
+            <id property="work_id" column="work_id"/>
+            <result property="begandend" column="begandend"/>
+            <result property="comname" column="comname"/>
+            <result property="peoplenum" column="peoplenum"/>
+            <result property="money" column="money"/>
+            <result property="why" column="why"/>
+            <result property="witness" column="witness"/>
+        </collection>
+        <collection property="familyDtoList" ofType="FamilyDto">
+            <id property="family_id" column="family_id"/>
+            <result property="status" column="status"/>
+            <result property="relay" column="relay"/>
+            <result property="name" column="name"/>
+            <result property="address" column="address"/>
+            <result property="post" column="post"/>
+            <result property="phone" column="phone"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUserId" parameterType="String" resultType="String">
+        SELECT apply_form.user_id FROM apply_form WHERE post = #{post}
+    </select>
+    <select id="findInterview" parameterType="String" resultMap="listDtoMap">
+        SELECT apply_form.post,apply_form.formdate,recruit_base.user_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
+        FROM recruit_user,recruit_base,apply_form
+        WHERE recruit_user.user_id = #{user_id}
+        AND recruit_base.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.user_id = #{user_id})
+        AND apply_form.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.user_id = #{user_id})
+        AND recruit_user.user_status IN ('0','1','2')
+    </select>
+
+    <select id="findUserid" resultType="String">
+        SELECT apply_form.user_id FROM apply_form WHERE post NOT IN ('商务助理','区域销售')
+    </select>
+
+    <select id="findDetails" parameterType="String" resultMap="Details">
+        SELECT apply_form.* , recruit_base.* , teach.* , family.* ,work.*
+        FROM apply_form,recruit_base,teach,family,work
+        WHERE recruit_base.user_id = #{user_id}
+              AND apply_form.user_id = (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.user_id = #{user_id})
+              AND teach.user_id IN (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.user_id = #{user_id})
+              AND work.user_id IN (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.user_id = #{user_id})
+              AND family.user_id IN (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.user_id = #{user_id})
+    </select>
+
+
+    <update id="updataDept" parameterType="String" >
+        UPDATE recruit_base SET recruit_base.dept_id = #{dept_id}
+        WHERE recruit_base.user_id = #{User_id}
+    </update>
+    <!--查询部门id-->
+    <select id="selectDept" parameterType="String" resultType="String">
+        SELECT dept_name FROM recruit_dept WHERE dept_id =
+        (SELECT recruit_base.dept_id FROM recruit_base WHERE user_id = #{user_id})
+    </select>
+    <insert id="createEvalute" parameterType="com.cs.recruit.dto.EvaluateDto">
+        INSERT INTO recruit_evaluate VALUES (#{evaluate_id},#{user_id},#{rale_name},
+        #{dept_id},#{post})
+    </insert>
+    <insert id="createFirsttry" parameterType="com.cs.recruit.dto.EvaluateDto">
+        INSERT INTO first_try VALUES (#{firsttry_id},#{evaluate_id},#{first_colligate_text},
+        #{first_colligate})
+    </insert>
+    <insert id="createSecondtry" parameterType="com.cs.recruit.dto.EvaluateDto">
+        INSERT INTO second_try VALUES (#{secondtry_id},#{evaluate_id},#{second_colligate_text},
+        #{second_colligate})
+    </insert>
+    <insert id="createEmploy" parameterType="com.cs.recruit.dto.EvaluateDto">
+        INSERT INTO employ VALUES (#{employ_id},#{evaluate_id},#{colligate_text},#{colligate},
+        #{manager_text},#{manager})
+    </insert>
+
+    <!-- 进行评价是否通过该轮面试-->
+    <update id="UpdateEvaluate" parameterType="com.cs.recruit.dto.EvaluateDto">
+        UPDATE first_try,second_try,employ
+        <trim prefix="set" suffixOverrides=",">
+            <if test="first_colligate_text != null">first_colligate_text = #{first_colligate_text},</if>
+            <if test="first_colligate!=null">first_colligate = #{first_colligate},</if>
+            <if test="second_colligate_text!=null">second_colligate_text = #{second_colligate_text},</if>
+            <if test="second_colligate!=null">second_colligate = #{second_colligate},</if>
+            <if test="colligate_text!=null">colligate_text=#{colligate_text},</if>
+            <if test="colligate!=null">colligate=#{colligate},</if>
+            <if test="manager_text!=null">manager_text=#{manager_text},</if>
+            <if test="manager!=null">manager=#{manager}</if>
+        </trim>
+        WHERE first_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
+        AND second_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
+        AND employ.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
+    </update>
+
+    <!--未通过第一轮面试-->
+   <update id="updateFirstNo" parameterType="String">
+       UPDATE recruit_user SET user_status = '-1' WHERE user_id = #{user_id}
+   </update>
+    <!--通过第一轮面试-->
+    <update id="updateFirstYes" parameterType="String">
+        UPDATE recruit_user SET user_status = '1' WHERE user_id = #{user_id}
+    </update>
+    <!--未通过第二轮面试-->
+    <update id="updateSecondNo" parameterType="String">
+        UPDATE recruit_user SET user_status = '-1' WHERE user_id = #{user_id}
+    </update>
+    <!--通过第二轮面试-->
+    <update id="updateSecondYes" parameterType="String">
+        UPDATE recruit_user SET user_status = '2' WHERE user_id = #{user_id}
+    </update>
+    <!--被驳回-->
+    <update id="updateEmployNo" parameterType="String">
+        UPDATE recruit_user SET user_status = '3' WHERE user_id = #{user_id}
+    </update>
+    <!--已录用-->
+    <update id="updateEmployYes" parameterType="String">
+        UPDATE recruit_user SET user_status='4' WHERE user_id = #{user_id}
+    </update>
+
+
+    <!--查看已录取应聘者-->
+    <select id="findInterviewed" resultMap="listDtoMap">
+        SELECT apply_form.user_id,apply_form.post,apply_form.formdate,recruit_base.phone,recruit_user.user_status,recruit_base.rale_name
+        FROM recruit_user,apply_form,recruit_base
+        WHERE recruit_user.user_status in ('4')
+        AND  recruit_user.user_id = recruit_base.user_id AND apply_form.base_id = recruit_base.base_id
+        ORDER BY rale_name;
+    </select>
+    <!-- 查看详情（已录取）-->
+    <select id="findDetailsed" parameterType="String" resultMap="Details">
+        SELECT apply_form.* , recruit_base.* , teach.* , family.* ,work.*
+        FROM apply_form,recruit_base,teach,family,work
+        WHERE recruit_base.user_id = #{user_id} AND recruit_base.base_id = apply_form.base_id AND recruit_base.base_id = teach.base_id
+        AND recruit_base.base_id = work.base_id AND recruit_base.base_id = family.base_id;
+    </select>
+    <!--查看被驳回面试者-->
+    <select id="findInterviewun" parameterType="String" resultMap="listDtoMap">
+        SELECT apply_form.user_id,apply_form.post,apply_form.formdate,recruit_base.phone,recruit_user.user_status,recruit_base.rale_name
+        FROM recruit_user,apply_form,recruit_base
+        WHERE recruit_user.user_status in ('3')
+              AND  recruit_user.user_id = recruit_base.user_id AND apply_form.base_id = recruit_base.base_id
+        ORDER BY rale_name;
+    </select>
+    <select id="findDetailsun" parameterType="String" resultMap="Details">
+        SELECT apply_form.* , recruit_base.* , teach.* , family.* ,work.*
+        FROM apply_form,recruit_base,teach,family,work
+        WHERE recruit_base.user_id = #{user_id} AND recruit_base.base_id = apply_form.base_id AND recruit_base.base_id = teach.base_id
+        AND recruit_base.base_id = work.base_id AND recruit_base.base_id = family.base_id;
+    </select>
+    <!--确认驳回-->
+    <update id="UpdateUser" parameterType="User">
+        UPDATE recruit_user SET user_status = '-1' WHERE recruit_user.user_id = #{user_id}
+    </update>
+</mapper>

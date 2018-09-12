@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs.recruit.dao.UserDao">
+    <resultMap id="UserResult" type="User">
+        <id property="user_id" column="user_id"/>
+        <result property="user_name" column="user_name"/>
+        <result property="user_card" column="user_card"/>
+        <result property="user_status" column="user_status"/>
+    </resultMap>
+    <select id="findByUserAndCard" parameterType="User" resultMap="UserResult">
+        SELECT * FROM recruit_user WHERE user_name=#{user_name} AND user_card = #{user_card}
+    </select>
+    <insert id="insert" parameterType="User">
+        INSERT INTO recruit_user(user_id,user_name,user_card) VALUES
+            (#{user_id},#{user_name},#{user_card})
+    </insert>
+</mapper>

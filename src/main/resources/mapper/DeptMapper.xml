@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs.recruit.dao.DeptDao">
+    <resultMap id="DeptResult" type="Dept">
+        <id property="dept_id" column="dept_id"/>
+        <result property="dept_name" column="dept_name"/>
+    </resultMap>
+    <select id="findDept" resultMap="DeptResult">
+        select *
+        from recruit_dept
+         ORDER BY dept_id DESC;
+    </select>
+</mapper>

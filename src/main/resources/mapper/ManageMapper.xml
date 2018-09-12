@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs.recruit.dao.ManagerDao">
+    <resultMap id="Details" type="com.cs.recruit.dto.DetailsDto">
+        <!--基本信息-->
+        <id property="base_id" column="base_id"/>
+        <result property="rale_name" column="rale_name"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="haw" column="haw"/>
+        <result property="nation" column="nation"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="language" column="language"/>
+        <result property="job" column="job"/>
+        <result property="idcard" column="idcard"/>
+        <result property="certificate" column="certificate"/>
+        <result property="address" column="address"/>
+        <result property="friend" column="friend"/>
+        <result property="hobby" column="hobby"/>
+        <result property="contact_name" column="contact_name"/>
+        <result property="contact_phone" column="contact_phone"/>
+        <association property="applyDto" javaType="com.cs.recruit.dto.ApplyDto">
+            <id property="apply_id" column="apply_id"/>
+            <result property="post" column="post"/>
+            <result property="money" column="money"/>
+            <result property="formdate" column="formdate"/>
+            <result property="comedate" column="comedate"/>
+        </association>
+        <collection property="teachDtoList" ofType="TeachDto">
+            <id property="teach_id" column="teach_id"/>
+            <result property="begandend" column="begandend"/>
+            <result property="schoole" column="schoole"/>
+            <result property="major" column="major"/>
+            <result property="record" column="record"/>
+        </collection>
+        <collection property="workDtoList" ofType="WorkDto">
+            <id property="work_id" column="work_id"/>
+            <result property="begandend" column="begandend"/>
+            <result property="comname" column="comname"/>
+            <result property="peoplenum" column="peoplenum"/>
+            <result property="money" column="money"/>
+            <result property="why" column="why"/>
+            <result property="witness" column="witness"/>
+        </collection>
+        <collection property="familyDtoList" ofType="FamilyDto">
+            <id property="family_id" column="family_id"/>
+            <result property="status" column="status"/>
+            <result property="relay" column="relay"/>
+            <result property="name" column="name"/>
+            <result property="address" column="address"/>
+            <result property="post" column="post"/>
+            <result property="phone" column="phone"/>
+        </collection>
+    </resultMap>
+    <resultMap id="listDtoMap" type="com.cs.recruit.dto.listDto">
+        <id property="user_id" column="user_id"/>
+        <result property="rale_name" column="rale_name"/>
+        <result property="user_status" column="user_status"/>
+        <result property="post" column="post"/>
+        <result property="phone" column="phone"/>
+        <result property="formdate" column="formdate"/>
+    </resultMap>
+    <!--查询所有已通过面试者-->
+    <select id="findInterview2" parameterType="String" resultMap="listDtoMap">
+        SELECT apply_form.post,apply_form.formdate,recruit_base.user_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
+        FROM recruit_user,recruit_base,apply_form
+        WHERE recruit_user.dept_id = #{dept_id}
+              AND recruit_base.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.dept_id = #{dept_id})
+              AND apply_form.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.dept_id = #{dept_id})
+              AND recruit_user.user_status IN ('2')
+    </select>
+    <!--查看个人简历详情-->
+    <select id="findDetails" parameterType="String" resultMap="Details">
+        SELECT apply_form.* , recruit_base.* , teach.* , family.* ,work.*
+        FROM apply_form,recruit_base,teach,family,work
+        WHERE recruit_base.user_id = #{user_id} AND recruit_base.base_id = apply_form.base_id AND recruit_base.base_id = teach.base_id
+        AND recruit_base.base_id = work.base_id AND recruit_base.base_id = family.base_id;
+    </select>
+    <!--查看笔试结果详情-->
+    <select id="findWriteAssistent" parameterType="String" resultType="AssistentWriteDto">
+        SELECT first,second,third,first_ans,second_ans,third_ans
+        FROM assistent_subject,assistent_answer
+        WHERE base_id = (SELECT  base_id FROM recruit_base WHERE user_id = #{user_id})
+    </select>
+    <select id="findWriteOther" parameterType="String" resultType="OtherWriteDto">
+        SELECT other_answer.*,other_subject.*
+        FROM other_answer,other_subject
+        WHERE other_answer.base_id = (SELECT base_id FROM recruit_base WHERE user_id = #{user_id})
+    </select>
+    <select id="findWriteSale" parameterType="String" resultType="SaleWriteDto">
+        SELECT sale_subject.first,sale_subject.second,sale_subject.third,sale_subject.fourth,
+            sale_answer.first_ans,sale_answer.second_ans,sale_answer.third_ans,sale_answer.fourth_ans
+        FROM sale_answer,sale_subject
+        WHERE base_id = (SELECT base_id FROM recruit_base WHERE user_id = #{user_id})
+    </select>
+    <select id="findPost" parameterType="String" resultType="String">
+        SELECT post FROM apply_form WHERE apply_form.base_id = (SELECT base_id FROM recruit_base WHERE user_id = #{user_id})
+
+    </select>
+    <!--查看面试评价-->
+    <select id="findEvaluate" parameterType="String" resultType="EvaluateDto">
+        SELECT recruit_evaluate.*,first_try.*,second_try.*,employ.*
+        FROM recruit_evaluate,first_try,second_try,employ
+        WHERE first_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id=#{user_id})
+              AND   second_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id=#{user_id})
+              AND   employ.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id=#{user_id})
+              AND recruit_evaluate.user_id = #{user_id}
+    </select>
+
+    <!--查看性格测试-->
+    <select id="findCharacter" parameterType="String" resultType="CharacterDto">
+        SELECT f_sum,f_result FROM face WHERE face.user_id = #{user_id}
+    </select>
+
+    <!--决定是否录用-->
+    <update id="UpdateEvaluate" parameterType="com.cs.recruit.dto.EvaluateDto">
+        UPDATE first_try,second_try,employ SET first_colligate_text = #{first_colligate_text},first_colligate = #{first_colligate}
+            , second_colligate_text = #{second_colligate_text},second_colligate = #{second_colligate}
+            ,colligate_text=#{colligate_text},colligate=#{colligate}
+            ,manager_text=#{manager_text},manager=#{manager}
+        WHERE first_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
+              AND second_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
+              AND employ.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
+    </update>
+    <update id="updateUserNo" parameterType="String">
+        UPDATE recruit_user SET user_status = '3' WHERE user_id = #{user_id}
+    </update>
+    <update id="updateUserYes" parameterType="String">
+        UPDATE recruit_user SET user_status = '4' WHERE user_id = #{user_id}
+    </update>
+</mapper>
