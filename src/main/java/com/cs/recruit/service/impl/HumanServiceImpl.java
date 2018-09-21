@@ -31,17 +31,26 @@ public class HumanServiceImpl implements HumanService {
         listDto listdto = new listDto();
         List<listDto> listDtos = new ArrayList<listDto>();
         List<String> stringList = new ArrayList<String>();
-        if (post != "区域销售" && post != "商务助理"){
-            stringList = humanDao.findUserid();
-        }else {
+
+//        System.out.println(post);
+//        System.out.println("---------------------------");
+//        System.out.println("区域销售".equals(post) || "商务助理".equals(post) );
+
+        if ( "区域销售".equals(post) || "商务助理".equals(post) ){
             stringList = humanDao.findUserId(post);
+        }else {
+            stringList = humanDao.findUserid();
         }
+
         for (String s:stringList) {
             listdto = humanDao.findInterview(s);
             listDtos.add(listdto);
         }
+
         return listDtos;
+
     }
+
     public List<listDto> findInterviewno(){
         return humanDao.findInterviewno();
     }

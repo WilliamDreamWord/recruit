@@ -59,6 +59,7 @@ public class HumanController {
     //查看应聘相应职位的面试者
     @RequestMapping(value = "/findPostInterview",produces = "application/json;charset=utf-8")
     public @ResponseBody List<listDto> findPostInterview(String post){
+        System.out.println(post);
         return humanService.findInterview(post);
     }
     //查看面试者详情

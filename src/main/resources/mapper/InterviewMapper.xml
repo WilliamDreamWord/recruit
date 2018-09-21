@@ -353,7 +353,8 @@
         INSERT INTO recruit_result VALUES (#{result_id},#{e_sum},#{i_sum}
         ,#{s_sum},#{n_sum},#{j_sum},#{p_sum},#{t_sum},#{f_sum},#{result_type},#{user_id})
     </insert>
-    <select id="selectResult" parameterType="String" resultType="com.cs.recruit.entity.Result">
-        SELECT * FROM recruit_result WHERE user_id=#{user_id}
+    <select id="selectResult" resultType="com.cs.recruit.entity.Result">
+        SELECT * FROM recruit.recruit_result WHERE user_id=#{user_id}
     </select>
+
 </mapper>

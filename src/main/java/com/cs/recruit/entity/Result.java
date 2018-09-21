@@ -4,11 +4,18 @@ package com.cs.recruit.entity;
  * Created by asus on 2018/8/29.
  */
 public class Result {
+
     private String user_id;
     private String result_id;
     private String e_sum;
     private String i_sum;
     private String t_sum;
+    private String s_sum;
+    private String n_sum;
+    private String j_sum;
+    private String p_sum;
+    private String f_sum;
+    private String result_type;
 
     public String getResult_type() {
         return result_type;
@@ -18,7 +25,6 @@ public class Result {
         this.result_type = result_type;
     }
 
-    private String result_type;
     public String getT_sum() {
         return t_sum;
     }
@@ -34,8 +40,6 @@ public class Result {
     public void setF_sum(String f_sum) {
         this.f_sum = f_sum;
     }
-
-    private String f_sum;
 
     public String getUser_id() {
         return user_id;
@@ -89,9 +93,7 @@ public class Result {
         return j_sum;
     }
 
-    public void setJ_sum(String j_sum) {
-        this.j_sum = j_sum;
-    }
+    public void setJ_sum(String j_sum) { this.j_sum = j_sum; }
 
     public String getP_sum() {
         return p_sum;
@@ -101,9 +103,5 @@ public class Result {
         this.p_sum = p_sum;
     }
 
-    private String s_sum;
-    private String n_sum;
-    private String j_sum;
-    private String p_sum;
 
 }

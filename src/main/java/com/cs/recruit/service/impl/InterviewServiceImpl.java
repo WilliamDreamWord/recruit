@@ -337,6 +337,10 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public Result selectResult(User user) {
+
+        System.out.println("---------------------------------------");
+        System.out.println(interviewDao.selectResult(user.getUser_id()));
+        System.out.println(user.getUser_id());
         return interviewDao.selectResult(user.getUser_id());
     }
 }

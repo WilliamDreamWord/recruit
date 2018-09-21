@@ -43,10 +43,6 @@ public class InterviewDto {
         this.formdate = formdate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
     public String getUser_id() {
         return user_id;
     }
@@ -55,10 +51,14 @@ public class InterviewDto {
         this.user_id = user_id;
     }
 
+    public String getStatus() {
+        return status;
+    }
 
     public void setStatus(String status) {
         this.status = status;
     }
+
     public String toString(){
         return "[" + user_name + " " + post + " " + phone + " " + formdate + " " + status + " " + user_id + "]";
     }
