@@ -1,29 +1,33 @@
 package com.cs.recruit.dao;
 
-import com.cs.recruit.dto.CWDto;
 import com.cs.recruit.dto.CharacterWriteDto;
-import com.cs.recruit.dto.DetailsDto;
 import com.cs.recruit.entity.*;
 
-import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by asus on 2018/8/13.
  */
 public interface InterviewDao {
+    //查询应聘者的申请状态
+    public String selectRecruStatus(String user_id);
     //打开简历
     //查询是否填写过简历
     //查询申请表
     public Apply selectApply(String user_id);
     //插入申请表
     public int insertIntoApply(Apply apply);
+    //更新申请状态 apply
+    public int updateApplyRecruStatus(String user_id);
     //更新申请表
     public int updateApply(Apply apply);
     //查询基本信息
     public Base selectBase(String user_id);
     //插入基本信息
     public int insertIntoBase(Base base);
+    //更新申请状态 base
+    public int updateBaseRecruStatus(String user_id);
     //更新基本信息
     public int updateBase(Base base);
     public int deleteTeach(String user_id);
@@ -31,12 +35,16 @@ public interface InterviewDao {
     public List<Teach> selectTeach(String user_id);
     //插入教育经历
     public int insertIntoTeach(Teach teach);
+    //更新申请状态 teach
+    public int updateTeachRecruStatus(String user_id);
     //更新教育经历
     public int updateTeach(Teach teach);
     //查询工作经历
     public List<Work> selectWork(String user_id);
     //插入工作经历
     public int insertIntoWork(Work work);
+    //更新申请状态 work
+    public int updateWorkRecruStatus(String user_id);
     //更新工作经历
     public int updateWork(Work work);
     public int deleteWork(String user_id);
@@ -44,6 +52,8 @@ public interface InterviewDao {
     public List<Family> selectFamily(String user_id);
     //插入家庭情况
     public int insertIntoFamily(Family family);
+    //更新申请状态 family
+    public int updateFamilyRecruStatus(String user_id);
     //更新家庭情况
     public int updateFamily(Family family);
     public int deleteFamily(String user_id);
@@ -51,6 +61,8 @@ public interface InterviewDao {
     //查询是否做过笔试题
     //查询职务
     public String findPost(String user_id);
+    //更新应聘者的申请状态
+    public int updateWriteRecruStatus(String user_id);
     //商务助理
     public Assistent_answer findAssistentWrite(String user_id);
     public int insertInotAss(Assistent_answer assistent_answer);
@@ -97,5 +109,21 @@ public interface InterviewDao {
     public int insertIntoFace(Face face);
 
     public int insertResult(Result result);
-    public Result selectResult(String user_id);
+    public int updateResultRecruStatus(String user_id);
+    public Map selectResult(String user_id);
+
+    /**
+     * 更新应聘者申请状态
+     * 一面
+     * 二面
+     * 一审
+     * 二审
+     */
+    public int updateFirstRecruStatus(String user_id);
+    public int updateSecondRecruStatus(String user_id);
+    public int updateFirst1RecruStatus(String user_id);
+    public int updateScond1RecruStatus(String user_id);
+
+    //查看应聘者是否填写完简历
+    public String selectResume(String user_id);
 }

@@ -4,6 +4,7 @@ package com.cs.recruit.entity;
  * Created by asus on 2018/8/10.
  */
 public class Assistent_answer {
+
     private String assans_id; //商务助理答案id
     private String user_id; //基本信息id
     private String first_ans; //第一题答案

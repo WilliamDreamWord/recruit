@@ -17,30 +17,6 @@ public class Result {
     private String f_sum;
     private String result_type;
 
-    public String getResult_type() {
-        return result_type;
-    }
-
-    public void setResult_type(String result_type) {
-        this.result_type = result_type;
-    }
-
-    public String getT_sum() {
-        return t_sum;
-    }
-
-    public void setT_sum(String t_sum) {
-        this.t_sum = t_sum;
-    }
-
-    public String getF_sum() {
-        return f_sum;
-    }
-
-    public void setF_sum(String f_sum) {
-        this.f_sum = f_sum;
-    }
-
     public String getUser_id() {
         return user_id;
     }
@@ -73,6 +49,14 @@ public class Result {
         this.i_sum = i_sum;
     }
 
+    public String getT_sum() {
+        return t_sum;
+    }
+
+    public void setT_sum(String t_sum) {
+        this.t_sum = t_sum;
+    }
+
     public String getS_sum() {
         return s_sum;
     }
@@ -93,7 +77,9 @@ public class Result {
         return j_sum;
     }
 
-    public void setJ_sum(String j_sum) { this.j_sum = j_sum; }
+    public void setJ_sum(String j_sum) {
+        this.j_sum = j_sum;
+    }
 
     public String getP_sum() {
         return p_sum;
@@ -103,5 +89,19 @@ public class Result {
         this.p_sum = p_sum;
     }
 
+    public String getF_sum() {
+        return f_sum;
+    }
 
+    public void setF_sum(String f_sum) {
+        this.f_sum = f_sum;
+    }
+
+    public String getResult_type() {
+        return result_type;
+    }
+
+    public void setResult_type(String result_type) {
+        this.result_type = result_type;
+    }
 }

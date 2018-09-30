@@ -1,15 +1,13 @@
 package com.cs.recruit.web;
 
-import com.cs.recruit.dto.DetailsDto;
-import com.cs.recruit.dto.EvaluateDto;
-import com.cs.recruit.dto.InterviewDto;
-import com.cs.recruit.dto.listDto;
+import com.cs.recruit.dto.*;
 import com.cs.recruit.entity.*;
 import com.cs.recruit.service.HumanService;
 import com.cs.recruit.service.InterviewService;
 import com.cs.recruit.service.ManagerService;
 import com.cs.recruit.util.JWT;
 import jdk.nashorn.internal.scripts.JO;
+import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -24,7 +22,7 @@ import java.util.List;
  * Created by asus on 2018/8/16.
  */
 @Controller
-@RequestMapping(value = "/manager")
+@RequestMapping(value = "/manage")
 @EnableSwagger2
 public class ManagerController {
     @Autowired
@@ -34,12 +32,21 @@ public class ManagerController {
     @Autowired
     private InterviewService interviewService;
     //查看所有已通过
-    @RequestMapping(value = "/findPostInterview",produces = "application/json;charset=utf-8")
-    public @ResponseBody List<listDto> findPostInterview(HttpServletRequest request){
+    @RequestMapping(value = "/findPostInterview", produces = "application/json;charset=utf-8")
+    public @ResponseBody List<listDto> findPostInterview(HttpServletRequest request) {
         String token = request.getParameter("token");
-        Job job = JWT.unsign(token,Job.class);
-        String dept_id = job.getDept_id();
-        return managerService.findInterview2(dept_id);
+        JobDto jobDto = JWT.unsign(token, JobDto.class);
+        System.out.println("---------------------------findPostInterview-------------------------");
+        if (jobDto == null) {
+            System.out.println("---------------------------findPostInterview---- 1 ------------------------");
+            return null;
+        } else {
+            System.out.println("---------------------------findPostInterview---- 2  ---------------------");
+            System.out.println(jobDto.toString());
+            String dept_id = jobDto.getDept_id().getDept_id();
+            return managerService.findInterview2(dept_id);
+        }
+
     }
     @RequestMapping(value = "/findDetails",produces = "application/json;charset=utf-8")
     public @ResponseBody DetailsDto findDetails(User user){
@@ -84,8 +91,7 @@ public class ManagerController {
     //查询职位
     @RequestMapping(value = "/post",produces = "application/json;charset=utf-8")
     public @ResponseBody String findPost(User user){
-        String post = managerService.findPost(user);
-        return post;
+        return managerService.findPost(user);
     }
     //查询答案
     @RequestMapping(value = "/findAssAnswer",produces = "application/json;charset=utf-8")

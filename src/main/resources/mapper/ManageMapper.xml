@@ -41,7 +41,8 @@
             <result property="begandend" column="begandend"/>
             <result property="comname" column="comname"/>
             <result property="peoplenum" column="peoplenum"/>
-            <result property="money" column="money"/>
+            <result property="post" column="w_post"/>
+            <result property="money" column="w_money"/>
             <result property="why" column="why"/>
             <result property="witness" column="witness"/>
         </collection>
@@ -50,9 +51,9 @@
             <result property="status" column="status"/>
             <result property="relay" column="relay"/>
             <result property="name" column="name"/>
-            <result property="address" column="address"/>
-            <result property="post" column="post"/>
-            <result property="phone" column="phone"/>
+            <result property="address" column="f_address"/>
+            <result property="post" column="f_post"/>
+            <result property="phone" column="f_phone"/>
         </collection>
     </resultMap>
     <resultMap id="listDtoMap" type="com.cs.recruit.dto.listDto">
@@ -63,14 +64,13 @@
         <result property="phone" column="phone"/>
         <result property="formdate" column="formdate"/>
     </resultMap>
-    <!--查询所有已通过面试者-->
+    <!--manager查询本部门已通过面试者-->
     <select id="findInterview2" parameterType="String" resultMap="listDtoMap">
         SELECT apply_form.post,apply_form.formdate,recruit_base.user_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
         FROM recruit_user,recruit_base,apply_form
-        WHERE recruit_user.dept_id = #{dept_id}
-              AND recruit_base.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.dept_id = #{dept_id})
-              AND apply_form.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.dept_id = #{dept_id})
-              AND recruit_user.user_status IN ('2')
+        WHERE recruit_base.dept_id = #{dept_id}
+              AND apply_form.user_id = (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.dept_id = #{dept_id})
+              AND recruit_user.user_status IN ('1')
     </select>
     <!--查看个人简历详情-->
     <select id="findDetails" parameterType="String" resultMap="Details">

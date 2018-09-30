@@ -24,7 +24,7 @@ public interface HumanService {
     public String selectDept(User user);
 
     //查看面试评价表
-    public EvaluateDto findEvaluate(User user);
+    public EvaluateDto findEvaluate(String user_id);
     public int createEvalute(EvaluateDto evaluateDto);
     public int createFirsttry(EvaluateDto evaluateDto);
     public int createSecondtry(EvaluateDto evaluateDto);
@@ -45,6 +45,9 @@ public interface HumanService {
     public int updateEmployNo(String user_id);
     //已录用
     public int updateEmployYes(String user_id);
+
+    //人力不通过 不录用
+    public int updateManagerNo(String user_id);
 
     //查看已录取应聘者
     public List<InterviewDto> findInterviewed();

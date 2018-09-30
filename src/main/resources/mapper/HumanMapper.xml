@@ -82,7 +82,8 @@
             <result property="begandend" column="begandend"/>
             <result property="comname" column="comname"/>
             <result property="peoplenum" column="peoplenum"/>
-            <result property="money" column="money"/>
+            <result property="post" column="w_post"></result>
+            <result property="money" column="w_money"/>
             <result property="why" column="why"/>
             <result property="witness" column="witness"/>
         </collection>
@@ -91,9 +92,9 @@
             <result property="status" column="status"/>
             <result property="relay" column="relay"/>
             <result property="name" column="name"/>
-            <result property="address" column="address"/>
-            <result property="post" column="post"/>
-            <result property="phone" column="phone"/>
+            <result property="address" column="f_address"/>
+            <result property="post" column="f_post"/>
+            <result property="phone" column="f_phone"/>
         </collection>
     </resultMap>
 
@@ -106,7 +107,7 @@
         WHERE recruit_user.user_id = #{user_id}
         AND recruit_base.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.user_id = #{user_id})
         AND apply_form.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.user_id = #{user_id})
-        AND recruit_user.user_status IN ('0','1','2')
+        AND recruit_user.recruit_status IN ('4','5','6','7')
     </select>
 
     <select id="findUserid" resultType="String">
@@ -114,8 +115,8 @@
     </select>
 
     <select id="findDetails" parameterType="String" resultMap="Details">
-        SELECT apply_form.* , recruit_base.* , teach.* , family.* ,work.*
-        FROM apply_form,recruit_base,teach,family,work
+        SELECT apply_form.* as apply_form, recruit_base.* as recruit_base, teach.*  as teach, family.* as family, work.* as work
+        FROM apply_form ,recruit_base,teach,family,work
         WHERE recruit_base.user_id = #{user_id}
               AND apply_form.user_id = (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.user_id = #{user_id})
               AND teach.user_id IN (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.user_id = #{user_id})
@@ -155,13 +156,13 @@
         UPDATE first_try,second_try,employ
         <trim prefix="set" suffixOverrides=",">
             <if test="first_colligate_text != null">first_colligate_text = #{first_colligate_text},</if>
-            <if test="first_colligate!=null">first_colligate = #{first_colligate},</if>
-            <if test="second_colligate_text!=null">second_colligate_text = #{second_colligate_text},</if>
-            <if test="second_colligate!=null">second_colligate = #{second_colligate},</if>
-            <if test="colligate_text!=null">colligate_text=#{colligate_text},</if>
-            <if test="colligate!=null">colligate=#{colligate},</if>
-            <if test="manager_text!=null">manager_text=#{manager_text},</if>
-            <if test="manager!=null">manager=#{manager}</if>
+            <if test="first_colligate != null">first_colligate = #{first_colligate},</if>
+            <if test="second_colligate_text != null">second_colligate_text = #{second_colligate_text},</if>
+            <if test="second_colligate != null">second_colligate = #{second_colligate},</if>
+            <if test="colligate_text != null">colligate_text=#{colligate_text},</if>
+            <if test="colligate != null">colligate=#{colligate},</if>
+            <if test="manager_text != null">manager_text=#{manager_text},</if>
+            <if test="manager != null">manager=#{manager}</if>
         </trim>
         WHERE first_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
         AND second_try.evaluate_id = (SELECT evaluate_id FROM recruit_evaluate WHERE user_id = #{user_id})
@@ -192,7 +193,10 @@
     <update id="updateEmployYes" parameterType="String">
         UPDATE recruit_user SET user_status='4' WHERE user_id = #{user_id}
     </update>
-
+    <!--人力不通过 不录用-->
+    <update id="updateManagerNo" parameterType="String">
+        UPDATE recruit_user SET user_status='-1' WHERE user_id = #{user_id}
+    </update>
 
     <!--查看已录取应聘者-->
     <select id="findInterviewed" resultMap="listDtoMap">

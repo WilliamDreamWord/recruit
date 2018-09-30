@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 public interface UserService {
     public User findByUserAndCard(User user);
     public int insert(User user);
+    public User findByUser(User user);
 }

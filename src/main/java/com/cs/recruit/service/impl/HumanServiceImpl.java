@@ -73,8 +73,8 @@ public class HumanServiceImpl implements HumanService {
     }
 
     @Override
-    public EvaluateDto findEvaluate(User user) {
-        return humanDao.findEvaluate(user.getUser_id());
+    public EvaluateDto findEvaluate(String user_id) {
+        return humanDao.findEvaluate(user_id);
     }
 
     @Override
@@ -131,6 +131,12 @@ public class HumanServiceImpl implements HumanService {
     @Override
     public int updateEmployYes(String user_id) {
         return humanDao.updateEmployYes(user_id);
+    }
+
+    //人力不通过 不录用
+    @Override
+    public int updateManagerNo(String user_id) {
+        return humanDao.updateManagerNo(user_id);
     }
 
 

@@ -21,6 +21,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -40,16 +41,18 @@ public class HumanController {
     private ManagerService managerService;
     @RequestMapping(value = "/login",produces = "application/json;charset=utf-8")
     public @ResponseBody ResponseData login(HttpServletRequest request, Job job){
+        ResponseData responseData = ResponseData.ok();
         if (jobService.findJobByUserAndPassword(job) != null){
-            ResponseData responseData = ResponseData.ok();
             responseData.putDataValue("job",jobService.findJobByUserAndPassword(job));
             String token = JWT.sign(jobService.findJobByUserAndPassword(job),30L * 24L * 3600L * 1000L);
             if (token != null){
                 responseData.putDataValue("token",token);
             }
             return responseData;
+        } else {
+            responseData.putDataValue("job", jobService.findJobByUserAndPassword(job));
+            return responseData;
         }
-        return ResponseData.serverInternalError();
     }
     //查看已经被部门主管驳回的人
     @RequestMapping(value = "/findDefalt",produces = "application/json;charset=utf-8")
@@ -81,7 +84,9 @@ public class HumanController {
     //查看面试评价表
     @RequestMapping(value = "/findEvalute",produces = "application/json;charset=utf-8")
     public @ResponseBody EvaluateDto findEvaluate(User user){
-        return humanService.findEvaluate(user);
+        System.out.println("-----------------------------findEvalute---------------------------");
+        System.out.println(user.getUser_id());
+        return humanService.findEvaluate(user.getUser_id());
 }
     //创建面试评价表
     @RequestMapping(value = "/createEvalute",produces = "application/json;charset=utf-8")
@@ -107,36 +112,105 @@ public class HumanController {
         humanService.createFirsttry(evaluateDto);
         humanService.createSecondtry(evaluateDto);
         humanService.createEmploy(evaluateDto);
-        return humanService.findEvaluate(user);
+        return humanService.findEvaluate(user.getUser_id());
     }
+
     //更新面试评价表
-    @RequestMapping(value = "/updateEvalute",produces = "application/json;charset=utf-8")
-    public @ResponseBody EvaluateDto updateEvalute(User user,EvaluateDto evaluateDto){
+//    @RequestMapping(value = "/updateEvalute",produces = "application/json;charset=utf-8")
+//    public @ResponseBody EvaluateDto updateEvalute(EvaluateDto evaluateDto){
+//        System.out.println("---------------------------------------updateEvaluate--- 1  ------------------------------");
+//        System.out.println(evaluateDto.getFirst_colligate_text() + "  " + evaluateDto.getFirst_colligate());
+//        humanService.UpdateEvaluate(evaluateDto);
+//        String user_id  = evaluateDto.getUser_id();
+//        String first_colligate = evaluateDto.getFirst_colligate();
+//        String second_colligate = evaluateDto.getSecond_colligate();
+//        String colligate = evaluateDto.getColligate();  //部门经理面试结果
+//        String manager = evaluateDto.getManager();  //人力最终决定结果
+//        System.out.println("---------------------------------------updateEvaluate----- 2  ----------------------------");
+//        System.out.println(user_id + "  " + first_colligate + "  " + second_colligate + "  " + colligate + "  " + manager);
+//
+//        System.out.println("---------------------------------------updateEvaluate----- 3  ----------------------------");
+//        return humanService.findEvaluate(user_id);
+//    }
+
+    //更新面试评价表 一面 人力面试 first_colligate
+    @RequestMapping(value = "z", produces = "application/json;charset=utf-8")
+    public @ResponseBody EvaluateDto updateFirst(EvaluateDto evaluateDto) {
+        System.out.println("---------------------------------------updateEvaluate--- 1  ------------------------------");
         humanService.UpdateEvaluate(evaluateDto);
-        String user_id  = evaluateDto.getUser_id();
+        String user_id = evaluateDto.getUser_id();
         String first_colligate = evaluateDto.getFirst_colligate();
-        String second_colligate = evaluateDto.getSecond_colligate();
-        String colligate = evaluateDto.getColligate();
-        String manager = evaluateDto.getManager();
-        if (first_colligate.equals("不通过")){
-            humanService.updateFirstNo(user_id);
-        }
-        if (first_colligate.equals("通过") && second_colligate == null && colligate == null && manager ==null){
+        if (first_colligate.equals("通过")) {
+            interviewService.updateFirstRecruStatus(user_id);
             humanService.updateFirstYes(user_id);
-        }
-        if (first_colligate.equals("通过") && second_colligate.equals("不通过")){
-            humanService.updateSecondNo(user_id);
-        }
-        if (first_colligate.equals("通过") && second_colligate.equals("通过") && colligate == null && manager == null){
-            humanService.updateSecondYes(user_id);
-        }
-        if (first_colligate.equals("通过") && second_colligate.equals("通过") && colligate.equals("通过") && manager.equals("通过")){
-            humanService.updateEmployYes(user_id);
-        }else {
-            humanService.updateEmployNo(user_id);
-        }
-        return humanService.findEvaluate(user);
+        } else
+            humanService.updateFirstNo(user_id);
+        System.out.println("---------------------------------------updateEvaluate----- 2  ----------------------------");
+        System.out.println(user_id + "  " + first_colligate);
+
+        System.out.println("---------------------------------------updateEvaluate----- 3  ----------------------------");
+        return humanService.findEvaluate(user_id);
     }
+
+    //更新面试评价表 二面 部门经理面试 second_colligate
+    @RequestMapping(value = "/updateSecond", produces = "application/json;charset=utf-8")
+    public @ResponseBody EvaluateDto updateSecond(EvaluateDto evaluateDto) {
+        System.out.println("---------------------------------------updateEvaluate--- 1  ------------------------------");
+        humanService.UpdateEvaluate(evaluateDto);
+        String user_id = evaluateDto.getUser_id();
+        String second_colligate = evaluateDto.getSecond_colligate();
+        if (second_colligate.equals("通过")) {
+            interviewService.updateSecondRecruStatus(user_id);
+            humanService.updateSecondYes(user_id);
+        } else
+            humanService.updateSecondNo(user_id);
+        System.out.println("---------------------------------------updateEvaluate----- 2  ----------------------------");
+        System.out.println(user_id + "  " + second_colligate);
+
+        System.out.println("---------------------------------------updateEvaluate----- 3  ----------------------------");
+        return humanService.findEvaluate(user_id);
+    }
+
+    //更新面试评价表 一审 部门主管审批 colligate
+    @RequestMapping(value = "/updateColligate", produces = "application/json;charset=utf-8")
+    public @ResponseBody EvaluateDto updateColligate(EvaluateDto evaluateDto) {
+        System.out.println("---------------------------------------updateEvaluate--- 1  ------------------------------");
+        humanService.UpdateEvaluate(evaluateDto);
+        String user_id = evaluateDto.getUser_id();
+        String colligate = evaluateDto.getColligate();
+        if (colligate.equals("通过")) {
+            interviewService.updateFirst1RecruStatus(user_id);
+        } else {
+            humanService.updateManagerNo(user_id);
+        }
+
+        System.out.println("---------------------------------------updateEvaluate----- 2  ----------------------------");
+        System.out.println(user_id + "  " + colligate);
+
+        System.out.println("---------------------------------------updateEvaluate----- 3  ----------------------------");
+        return humanService.findEvaluate(user_id);
+    }
+
+    //更新面试评价表 二审 人力审批 manager
+    @RequestMapping(value = "/updateManager", produces = "application/json;charset=utf-8")
+    public @ResponseBody EvaluateDto updateManager(EvaluateDto evaluateDto) {
+        System.out.println("---------------------------------------updateEvaluate--- 1  ------------------------------");
+        humanService.UpdateEvaluate(evaluateDto);
+        String user_id = evaluateDto.getUser_id();
+        String manager = evaluateDto.getManager();
+        if (manager.equals("通过")) {
+            interviewService.updateSecond1RecruStatus(user_id);
+            humanService.updateEmployYes(user_id);
+        } else
+            humanService.updateManagerNo(user_id);
+
+        System.out.println("---------------------------------------updateEvaluate----- 2  ----------------------------");
+        System.out.println(user_id + "  " + manager);
+
+        System.out.println("---------------------------------------updateEvaluate----- 3  ----------------------------");
+        return humanService.findEvaluate(user_id);
+    }
+
     //更新用户状态
     @RequestMapping(value = "/updateUser",produces = "application/json;charset=utf-8")
     public @ResponseBody int updateUser(EvaluateDto evaluateDto){
@@ -187,16 +261,21 @@ public class HumanController {
     @RequestMapping(value = "/findAnswer",produces = "application/json;charset=utf-8")
     public @ResponseBody Object findAssAnswer(User user){
         String post = interviewService.findPost(user);
-        if (post == "商务助理"){
+        System.out.println("---------------------------findAnswer-----------------------------");
+        System.out.println(post);
+        if (post.equals("商务助理")){
+            System.out.println("----------------- 1 -------------------");
             Assistent_answer assistent_answer = new Assistent_answer();
             AssistentWriteDto assistentWriteDto = new AssistentWriteDto();
             Assistent_subject assistent_subject = new Assistent_subject();
             assistent_subject = interviewService.findAssSubject();
             assistent_answer = interviewService.findAssistentWrite(user);
+            System.out.println(assistent_answer.toString());
             assistentWriteDto.setAssistent_answer(assistent_answer);
             assistentWriteDto.setAssistent_subject(assistent_subject);
             return assistentWriteDto;
-        }if (post == "区域销售"){
+        }if (post.equals("区域销售")){
+            System.out.println("----------------- 2 -------------------");
             Sale_subject sale_subject = new Sale_subject();
             Sale_answer sale_answer = new Sale_answer();
             SaleWriteDto saleWriteDto = new SaleWriteDto();
@@ -206,6 +285,7 @@ public class HumanController {
             saleWriteDto.setSale_answer(sale_answer);
             return saleWriteDto;
         }else{
+            System.out.println("----------------- 3 -------------------");
             Other_subject other_subject = new Other_subject();
             Other_answer other_answer = new Other_answer();
             OtherWriteDto otherWriteDto = new OtherWriteDto();
@@ -226,7 +306,7 @@ public class HumanController {
     }
     //查询性格测试
     @RequestMapping(value = "/selectResult",produces = "application/json;charset=utf-8")
-    public @ResponseBody Result selectResult(User user){
+    public @ResponseBody Map selectResult(User user){
         return interviewService.selectResult(user);
     }
 }

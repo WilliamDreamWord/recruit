@@ -10,10 +10,12 @@
         <result property="user_status" column="user_status"/>
     </resultMap>
     <select id="findByUserAndCard" parameterType="User" resultMap="UserResult">
-        SELECT * FROM recruit_user WHERE user_name=#{user_name} AND user_card = #{user_card}
+        SELECT * FROM recruit_user WHERE user_name=#{user_name} AND user_card=#{user_card}
+    </select>
+    <select id="findByUser" parameterType="User" resultMap="UserResult">
+        SELECT * FROM recruit_user WHERE user_name=#{user_name}
     </select>
     <insert id="insert" parameterType="User">
-        INSERT INTO recruit_user(user_id,user_name,user_card) VALUES
-            (#{user_id},#{user_name},#{user_card})
+        INSERT INTO recruit_user(user_id,user_name,user_card,user_status,recruit_status) VALUES(#{user_id},#{user_name},#{user_card},#{user_status},#{recruit_status})
     </insert>
 </mapper>

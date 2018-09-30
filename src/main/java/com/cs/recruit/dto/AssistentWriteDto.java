@@ -7,6 +7,10 @@ import com.cs.recruit.entity.Assistent_subject;
  * Created by asus on 2018/8/10.
  */
 public class AssistentWriteDto {
+
+    private Assistent_subject assistent_subject;
+    private Assistent_answer assistent_answer;
+
     public Assistent_subject getAssistent_subject() {
         return assistent_subject;
     }
@@ -23,6 +27,5 @@ public class AssistentWriteDto {
         this.assistent_answer = assistent_answer;
     }
 
-    private Assistent_subject assistent_subject;
-    private Assistent_answer assistent_answer;
+
 }

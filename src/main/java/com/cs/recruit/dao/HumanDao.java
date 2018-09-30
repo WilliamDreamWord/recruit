@@ -48,6 +48,9 @@ public interface HumanDao {
     //已录用
     public int updateEmployYes(String user_id);
 
+    //人力不通过 不录用
+    public int updateManagerNo(String user_id);
+
 
     //查看已录取应聘者
     public List<InterviewDto> findInterviewed();

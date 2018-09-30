@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by asus on 2018/8/13.
@@ -19,6 +20,11 @@ public class InterviewServiceImpl implements InterviewService {
     private InterviewDao interviewDao;
 
     @Override
+    public String selectRecruStatus(String user_id) {
+        return interviewDao.selectRecruStatus(user_id);
+    }
+
+    @Override
     public Apply selectApply(User user) {
         return interviewDao.selectApply(user.getUser_id());
     }
@@ -26,6 +32,11 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     public int insertIntoApply(Apply apply) {
         return interviewDao.insertIntoApply(apply);
+    }
+
+    @Override
+    public int updateApplyRecruStatus(String user_id) {
+        return interviewDao.updateApplyRecruStatus(user_id);
     }
 
     @Override
@@ -44,6 +55,11 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
+    public int updateBaseRecruStatus(String user_id) {
+        return interviewDao.updateBaseRecruStatus(user_id);
+    }
+
+    @Override
     public int updateBase(Base base) {
          return interviewDao.updateBase(base);
     }
@@ -56,6 +72,11 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     public int insertIntoTeach(Teach teach) {
          return interviewDao.insertIntoTeach(teach);
+    }
+
+    @Override
+    public int updateTeachRecruStatus(String user_id) {
+        return interviewDao.updateTeachRecruStatus(user_id);
     }
 
     @Override
@@ -75,6 +96,11 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     public int insertIntoWork(Work work) {
          return interviewDao.insertIntoWork(work);
+    }
+
+    @Override
+    public int updateWorkRecruStatus(String user_id) {
+        return interviewDao.updateWorkRecruStatus(user_id);
     }
 
     @Override
@@ -99,6 +125,11 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
+    public int updateFamilyRecruStatus(String user_id) {
+        return interviewDao.updateFamilyRecruStatus(user_id);
+    }
+
+    @Override
     public int updateFamily(Family family) {
         return interviewDao.updateFamily(family);
     }
@@ -111,6 +142,11 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     public String findPost(User user) {
         return interviewDao.findPost(user.getUser_id());
+    }
+
+    @Override
+    public int updateWriteRecruStatus(String user_id) {
+        return interviewDao.updateWriteRecruStatus(user_id);
     }
 
     @Override
@@ -336,11 +372,41 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public Result selectResult(User user) {
+    public int updateResultRecruStatus(String user_id) {
+        return interviewDao.updateResultRecruStatus(user_id);
+    }
+
+    @Override
+    public Map selectResult(User user) {
 
         System.out.println("---------------------------------------");
         System.out.println(interviewDao.selectResult(user.getUser_id()));
         System.out.println(user.getUser_id());
         return interviewDao.selectResult(user.getUser_id());
+    }
+
+    @Override
+    public int updateFirstRecruStatus(String user_id) {
+        return interviewDao.updateFirstRecruStatus(user_id);
+    }
+
+    @Override
+    public int updateSecondRecruStatus(String user_id) {
+        return interviewDao.updateSecondRecruStatus(user_id);
+    }
+
+    @Override
+    public int updateFirst1RecruStatus(String user_id) {
+        return interviewDao.updateFirst1RecruStatus(user_id);
+    }
+
+    @Override
+    public int updateSecond1RecruStatus(String user_id) {
+        return interviewDao.updateScond1RecruStatus(user_id);
+    }
+
+    @Override
+    public double selectResume(String user_id) {
+        return Double.valueOf(interviewDao.selectResume(user_id).toString());
     }
 }

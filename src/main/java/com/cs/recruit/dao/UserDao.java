@@ -9,4 +9,5 @@ import com.cs.recruit.entity.*;
 public interface UserDao {
     public User findByUserAndCard(User user);
     public int insert(User user);
+    public User findByUser(User user);
 }

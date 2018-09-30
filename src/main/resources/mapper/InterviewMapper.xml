@@ -62,7 +62,8 @@
             <result property="begandend" column="begandend"/>
             <result property="comname" column="comname"/>
             <result property="peoplenum" column="peoplenum"/>
-            <result property="money" column="money"/>
+            <result property="post" column="w_post"/>
+            <result property="money" column="w_money"/>
             <result property="why" column="why"/>
             <result property="witness" column="witness"/>
         </collection>
@@ -71,9 +72,9 @@
             <result property="status" column="status"/>
             <result property="relay" column="relay"/>
             <result property="name" column="name"/>
-            <result property="address" column="address"/>
-            <result property="post" column="post"/>
-            <result property="phone" column="phone"/>
+            <result property="address" column="f_address"/>
+            <result property="post" column="f_post"/>
+            <result property="phone" column="f_phone"/>
         </collection>
     </resultMap>
     <resultMap id="EI" type="com.cs.recruit.entity.Personality_EI">
@@ -104,6 +105,10 @@
         <result property="TF_a" column="TF_a"/>
         <result property="TF_b" column="TF_b"/>
     </resultMap>
+    <!--查看应聘者的申请状态-->
+    <select id="selectRecruStatus" parameterType="String" resultType="String">
+        SELECT recruit_user.recruit_status FROM recruit_user WHERE user_id = #{user_id}
+    </select>
 <!--打开简历-->
     <!--查询是否填写过-->
     <select id="selectApply" parameterType="String" resultType="com.cs.recruit.entity.Apply">
@@ -112,6 +117,10 @@
     <insert id="insertIntoApply" parameterType="com.cs.recruit.entity.Apply">
         INSERT INTO apply_form(apply_id, user_id, post, money, formdate, comedate) VALUES (#{apply_id},#{user_id},#{post},#{money},#{formdate},#{comedate});
     </insert>
+    <!--更新申请状态 apply-->
+    <update id="updateApplyRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '1.1' WHERE user_id = #{user_id}
+    </update>
     <update id="updateApply" parameterType="com.cs.recruit.entity.Apply">
         UPDATE apply_form SET apply_form.post = #{post},apply_form.money = #{money}
                              ,apply_form.formdate = #{formdate},apply_form.comedate = #{comedate}
@@ -125,6 +134,10 @@
                                          #{job},#{idcard},#{certificate},#{address},#{friend},#{hobby},#{contact_name},
                                          #{contact_phone},#{user_id},#{dept_id})
     </insert>
+    <!--更新申请状态 base-->
+    <update id="updateBaseRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '1.2' WHERE user_id = #{user_id}
+    </update>
     <update id="updateBase" parameterType="com.cs.recruit.entity.Base">
         UPDATE recruit_base SET rale_name = #{rale_name},sex=#{sex},birthday=#{birthday},haw=#{haw},nation=#{nation},phone=#{phone},
                                 email=#{email},language=#{language},job=#{job},idcard=#{idcard},certificate=#{certificate},address=#{address}
@@ -148,6 +161,10 @@
     <insert id="insertIntoTeach" parameterType="com.cs.recruit.entity.Teach">
         INSERT INTO teach VALUES (#{teach_id},#{begandend},#{schoole},#{major},#{record},#{user_id})
     </insert>
+    <!--更新申请状态 teach-->
+    <update id="updateTeachRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '1.3' WHERE user_id = #{user_id}
+    </update>
     <update id="updateTeach" parameterType="com.cs.recruit.entity.Teach">
         UPDATE teach SET begandend=#{begandend},schoole=#{schoole},major=#{major},record=#{record}
         WHERE teach_id = #{teach_id}
@@ -157,7 +174,8 @@
         <result property="begandend" column="begandend"/>
         <result property="comname" column="comname"/>
         <result property="peoplenum" column="peoplenum"/>
-        <result property="money" column="money"/>
+        <result property="post" column="w_post"/>
+        <result property="money" column="w_money"/>
         <result property="why" column="why"/>
         <result property="witness" column="witness"/>
         <result property="user_id" column="user_id"/>
@@ -168,6 +186,10 @@
     <insert id="insertIntoWork" parameterType="com.cs.recruit.entity.Work">
         INSERT INTO work VALUES (#{work_id},#{begandend},#{comname},#{peoplenum},#{post},#{money},#{why},#{witness},#{user_id})
     </insert>
+    <!--更新申请状态 work-->
+    <update id="updateWorkRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '1.5' WHERE user_id = #{user_id}
+    </update>
     <update id="updateWork" parameterType="com.cs.recruit.entity.Work">
         UPDATE work SET begandend=#{begandend},comname=#{comname},peoplenum=#{peoplenum},post=#{post},money=#{money},why=#{why},witness=#{witness}
         WHERE work_id = #{work_id}
@@ -180,9 +202,9 @@
         <result property="status" column="status"/>
         <result property="relay" column="relay"/>
         <result property="name" column="name"/>
-        <result property="address" column="address"/>
-        <result property="post" column="post"/>
-        <result property="phone" column="phone"/>
+        <result property="address" column="f_address"/>
+        <result property="post" column="f_post"/>
+        <result property="phone" column="f_phone"/>
         <result property="user_id" column="user_id"/>
     </resultMap>
     <select id="selectFamily" parameterType="String" resultMap="familyMap">
@@ -191,6 +213,10 @@
     <insert id="insertIntoFamily" parameterType="com.cs.recruit.entity.Family">
         INSERT INTO family VALUES (#{family_id},#{status},#{relay},#{name},#{address},#{post},#{phone},#{user_id});
     </insert>
+    <!--更新申请状态 family-->
+    <update id="updateFamilyRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '1.4' WHERE user_id = #{user_id}
+    </update>
     <update id="updateFamily" parameterType="com.cs.recruit.entity.Family">
         UPDATE family SET status=#{status},relay=#{relay},name=#{name},address=#{address},post=#{post},phone=#{phone}
         WHERE family_id = #{family_id}
@@ -203,7 +229,18 @@
     <select id="findPost" parameterType="String" resultType="String">
         SELECT post FROM apply_form WHERE user_id = #{user_id}
     </select>
-   <select id="findAssistentWrite" parameterType="String" resultType="com.cs.recruit.entity.Assistent_answer">
+    <!--更新申请状态 writer-->
+    <update id="updateWriteRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '2' WHERE user_id = #{user_id}
+    </update>
+    <resultMap id="Assistent_answer_map" type="com.cs.recruit.entity.Assistent_answer">
+        <id property="assans_id" column="assans_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="first_ans" column="first_ans"/>
+        <result property="second_ans" column="second_ans"/>
+        <result property="third_ans" column="third_ans"/>
+    </resultMap>
+   <select id="findAssistentWrite" parameterType="String" resultMap="Assistent_answer_map">
        SELECT * FROM assistent_answer WHERE user_id = #{user_id}
    </select>
     <insert id="insertInotAss" parameterType="com.cs.recruit.entity.Assistent_answer">
@@ -219,8 +256,13 @@
         WHERE user_id=#{user_id}
     </update>
 
-
-    <select id="findOtherWrite" parameterType="String" resultType="com.cs.recruit.entity.Other_answer">
+    <resultMap id="Other_answer_map" type="com.cs.recruit.entity.Other_answer">
+        <id property="othans_id" column="othans_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="first_ans" column="first_ans"/>
+        <result property="second_ans" column="second_ans"/>
+    </resultMap>
+    <select id="findOtherWrite" parameterType="String" resultMap="Other_answer_map">
         SELECT * FROM other_answer WHERE user_id = #{user_id}
     </select>
     <insert id="insertInotOther" parameterType="com.cs.recruit.entity.Other_answer">
@@ -235,10 +277,16 @@
         WHERE user_id = #{user_id}
     </update>
 
-
-    <select id="findSaleWrite" parameterType="String" resultType="com.cs.recruit.entity.Sale_answer">
-        SELECT * FROM sale_answer
-        WHERE user_id = #{user_id}
+    <resultMap id="sale_answer_map" type="com.cs.recruit.entity.Sale_answer">
+        <id property="saleans_id" column="saleans_id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="first_ans" column="first_ans"/>
+        <result property="second_ans" column="second_ans"/>
+        <result property="third_ans" column="third_ans"/>
+        <result property="fourth_ans" column="fourth_ans"/>
+    </resultMap>
+    <select id="findSaleWrite" parameterType="String" resultMap="sale_answer_map">
+        SELECT * FROM sale_answer WHERE user_id = #{user_id}
     </select>
     <insert id="insertInotSale" parameterType="com.cs.recruit.entity.Sale_answer">
         INSERT INTO sale_answer VALUES (#{saleans_id},#{user_id},#{first_ans},#{second_ans},#{third_ans},#{fourth_ans})
@@ -347,14 +395,45 @@
         SELECT sum(TF_b_ans) FROM personality_tf_ans WHERE user_id=#{user_id}
     </select>
     <insert id="insertIntoFace" parameterType="com.cs.recruit.entity.Face">
-        INSERT INTO face VALUES (#{face_id},#{user_id},#{eori},#{sorn},#{torf},#{jorp},#{sum},#{result})
+        INSERT INTO face VALUES (#{face_id},#{user_id},#{eori},#{sorn},#{torf},#{jorp},#{f_sum},#{f_result})
     </insert>
+    <!--更新申请状态-->
+    <update id="updateResultRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '3' WHERE user_id = #{user_id}
+    </update>
     <insert id="insertResult" parameterType="com.cs.recruit.entity.Result">
         INSERT INTO recruit_result VALUES (#{result_id},#{e_sum},#{i_sum}
         ,#{s_sum},#{n_sum},#{j_sum},#{p_sum},#{t_sum},#{f_sum},#{result_type},#{user_id})
     </insert>
-    <select id="selectResult" resultType="com.cs.recruit.entity.Result">
-        SELECT * FROM recruit.recruit_result WHERE user_id=#{user_id}
+    <resultMap id="resultListMap" type="java.util.HashMap">
+        <id column="id" property="id" />
+    </resultMap>
+    <select id="selectResult" parameterType="String" resultMap="resultListMap">
+        SELECT * FROM recruit_result WHERE user_id=#{user_id}
     </select>
 
+    <!--一面 更新申请状态-->
+    <update id="updateFirstRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '4' WHERE user_id = #{user_id}
+    </update>
+
+    <!--二面 更新申请状态-->
+    <update id="updateSecondRecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '5' WHERE user_id = #{user_id}
+    </update>
+
+    <!--一审 更新申请状态-->
+    <update id="updateFirst1RecruStatus" parameterType="String">
+        UPDATE recruit_user SET recruit_status = '6' WHERE  user_id = #{user_id}
+    </update>
+
+    <!--二审 更新申请状态-->
+    <update id="updateScond1RecruStatus" parameterType="String">
+        UPDATE recruit_user SET  recruit_status = '7' WHERE  user_id = #{user_id}
+    </update>
+
+    <!--查看应聘者是否填写简历-->
+    <select id="selectResume" parameterType="String" resultType="String">
+        SELECT recruit_status FROM recruit_user WHERE user_id = #{user_id}
+    </select>
 </mapper>

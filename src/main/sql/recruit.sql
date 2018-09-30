@@ -32,7 +32,7 @@ CREATE TABLE `apply_form` (
 -- ----------------------------
 -- Records of apply_form
 -- ----------------------------
-INSERT INTO `apply_form` VALUES ('001aa489-4052-4d44-b6ef-a43c7c72bc1f', '软件开发工程师', '5000', '2018-09-07', '2018-09-07', '7f317809-c6fd-41da-be55-a59863553a65');
+INSERT INTO `apply_form` VALUES ('001aa489-4052-4d44-b6ef-a43c7c72bc1f', '应用软件开发部', '5000', '2018-09-07', '2018-09-07', '7f317809-c6fd-41da-be55-a59863553a65');
 
 -- ----------------------------
 -- Table structure for assistent_answer
@@ -50,9 +50,9 @@ CREATE TABLE `assistent_answer` (
 -- ----------------------------
 -- Records of assistent_answer
 -- ----------------------------
-INSERT INTO `assistent_answer` VALUES ('6a3ba4d5-addd-449d-a9f6-466ae69e0b56', '7f317809-c6fd-41da-be55-a59863553a65', 'other-第一题答案', 'other-第一题答案', null);
+# INSERT INTO `assistent_answer` VALUES ('6a3ba4d5-addd-449d-a9f6-466ae69e0b56', '7f317809-c6fd-41da-be55-a59863553a65', 'other-第一题答案', 'other-第一题答案', null);
 INSERT INTO `assistent_answer` VALUES ('c7afef5d-91bf-4e07-85b2-493b06462d1d', '7f317809-c6fd-41da-be55-a59863553a65', '第一题答案', '第二题答案', '第二题答案');
-INSERT INTO `assistent_answer` VALUES ('f6d2b9a7-3f56-421d-8225-b82d7f51f32d', '7f317809-c6fd-41da-be55-a59863553a65', '第一题答案', '第二题答案', '第二题答案');
+# INSERT INTO `assistent_answer` VALUES ('f6d2b9a7-3f56-421d-8225-b82d7f51f32d', '7f317809-c6fd-41da-be55-a59863553a65', '第一题答案', '第二题答案', '第二题答案');
 
 -- ----------------------------
 -- Table structure for assistent_subject
@@ -88,7 +88,7 @@ CREATE TABLE `employ` (
 -- ----------------------------
 -- Records of employ
 -- ----------------------------
-INSERT INTO `employ` VALUES ('f59700ee-5ef2-4e4c-b3ed-08d7e08658e8', 'db24f4b0-175a-4800-9e57-bbe6c63800aa', null, null, null, null);
+# INSERT INTO `employ` VALUES ('f59700ee-5ef2-4e4c-b3ed-08d7e08658e8', 'db24f4b0-175a-4800-9e57-bbe6c63800aa', '11', '11', '11', '11');
 
 -- ----------------------------
 -- Table structure for face
@@ -97,12 +97,12 @@ DROP TABLE IF EXISTS `face`;
 CREATE TABLE `face` (
   `face_id` varchar(50) NOT NULL,
   `user_id` varchar(50) default NULL,
-  `eori` varchar(50) NOT NULL,
-  `sorn` varchar(50) NOT NULL,
-  `torf` varchar(50) NOT NULL,
-  `jorp` varchar(50) NOT NULL,
-  `f_sum` varchar(50) NOT NULL,
-  `f_result` varchar(50) NOT NULL,
+  `eori` varchar(50),
+  `sorn` varchar(50),
+  `torf` varchar(50),
+  `jorp` varchar(50),
+  `f_sum` varchar(50),
+  `f_result` varchar(50),
   PRIMARY KEY  (`face_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -119,9 +119,9 @@ CREATE TABLE `family` (
   `status` varchar(10) NOT NULL,
   `relay` varchar(10) default NULL,
   `name` varchar(10) default NULL,
-  `address` varchar(100) default NULL,
-  `post` varchar(20) default NULL,
-  `phone` varchar(20) default NULL,
+  `f_address` varchar(100) default NULL,
+  `f_post` varchar(20) default NULL,
+  `f_phone` varchar(20) default NULL,
   `user_id` varchar(50) default NULL,
   PRIMARY KEY  (`family_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -139,13 +139,14 @@ CREATE TABLE `first_try` (
   `firsttry_id` varchar(50) NOT NULL default '',
   `evaluate_id` varchar(50) default NULL,
   `first_colligate_text` text,
-  `first_colligate` varchar(10) default NULL
+  `first_colligate` varchar(10) default NULL,
+  PRIMARY KEY (`firsttry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of first_try
 -- ----------------------------
-INSERT INTO `first_try` VALUES ('68cc821d-b817-4498-a08f-8b904e86c31d', 'db24f4b0-175a-4800-9e57-bbe6c63800aa', null, null);
+# INSERT INTO `first_try` VALUES ('68cc821d-b817-4498-a08f-8b904e86c31d', 'db24f4b0-175a-4800-9e57-bbe6c63800aa', '11', '11');
 
 -- ----------------------------
 -- Table structure for other_answer
@@ -421,7 +422,7 @@ CREATE TABLE `recruit_base` (
 -- ----------------------------
 -- Records of recruit_base
 -- ----------------------------
-INSERT INTO `recruit_base` VALUES ('986b061e-f977-467e-8a49-7c6814e01e97', '廖秋露', '女性', '2000-12-31', '167cm & 56kg', '汉族&重庆', '15683689525', 'liaoqiulu0828@163.com', '四级', '在职', null, '无', '重庆', '王思聪', '睡觉', '王思聪', '1257878764661', '7f317809-c6fd-41da-be55-a59863553a65', '1');
+INSERT INTO `recruit_base` VALUES ('986b061e-f977-467e-8a49-7c6814e01e97', '廖秋露', '女性', '2000-12-31', '167cm & 56kg', '汉族&重庆', '15683689525', 'liaoqiulu0828@163.com', '四级', '在职', null, '无', '重庆', '王思聪', '睡觉', '王思聪', '1257878764661', '7f317809-c6fd-41da-be55-a59863553a65', '15');
 
 -- ----------------------------
 -- Table structure for recruit_dept
@@ -436,9 +437,22 @@ CREATE TABLE `recruit_dept` (
 -- ----------------------------
 -- Records of recruit_dept
 -- ----------------------------
-INSERT INTO `recruit_dept` VALUES ('1', '软件开发部');
-INSERT INTO `recruit_dept` VALUES ('2', '人力资源部');
-INSERT INTO `recruit_dept` VALUES ('3', '采购部');
+INSERT INTO `recruit_dept` VALUES ('1', '人力资源部');
+INSERT INTO `recruit_dept` VALUES ('2', '行政部');
+INSERT INTO `recruit_dept` VALUES ('3', '财政部');
+INSERT INTO `recruit_dept` VALUES ('4', 'IT信息部');
+INSERT INTO `recruit_dept` VALUES ('5', '综合服务部');
+INSERT INTO `recruit_dept` VALUES ('6', '集团服务部');
+INSERT INTO `recruit_dept` VALUES ('7', '运营商事业部');
+INSERT INTO `recruit_dept` VALUES ('8', '电力事业部');
+INSERT INTO `recruit_dept` VALUES ('9', '交通事业部');
+INSERT INTO `recruit_dept` VALUES ('10', '金融事业部');
+INSERT INTO `recruit_dept` VALUES ('11', '医疗事业部');
+INSERT INTO `recruit_dept` VALUES ('12', '市场部');
+INSERT INTO `recruit_dept` VALUES ('13', '结构部');
+INSERT INTO `recruit_dept` VALUES ('14', '硬件部');
+INSERT INTO `recruit_dept` VALUES ('15', '应用软件开发部');
+INSERT INTO `recruit_dept` VALUES ('16', '耗材研发部');
 
 -- ----------------------------
 -- Table structure for recruit_evaluate
@@ -456,7 +470,7 @@ CREATE TABLE `recruit_evaluate` (
 -- ----------------------------
 -- Records of recruit_evaluate
 -- ----------------------------
-INSERT INTO `recruit_evaluate` VALUES ('db24f4b0-175a-4800-9e57-bbe6c63800aa', '7f317809-c6fd-41da-be55-a59863553a65', null, '软件开发部', '软件开发工程师');
+# INSERT INTO `recruit_evaluate` VALUES ('db24f4b0-175a-4800-9e57-bbe6c63800aa', '7f317809-c6fd-41da-be55-a59863553a65', null, '应用软件开发部', '软件开发工程师');
 
 -- ----------------------------
 -- Table structure for recruit_job
@@ -474,8 +488,22 @@ CREATE TABLE `recruit_job` (
 -- ----------------------------
 -- Records of recruit_job
 -- ----------------------------
-INSERT INTO `recruit_job` VALUES ('1', 'admin', '123', '人力资源', '2');
-INSERT INTO `recruit_job` VALUES ('adac803f-8fdf-4cd2-a198-a7adccec0094', '廖秋露', '123', '软件开发工程师', '1');
+INSERT INTO `recruit_job` VALUES ('1', 'RLZY', '123', '人力资源部', '1');
+INSERT INTO `recruit_job` VALUES ('2', 'XZ', '123', '行政部', '2');
+INSERT INTO `recruit_job` VALUES ('3', 'CW', '123', '财务部', '3');
+INSERT INTO `recruit_job` VALUES ('4', 'ITXX', '123', 'IT信息部', '4');
+INSERT INTO `recruit_job` VALUES ('5', 'ZHFW', '123', '综合服务部', '5');
+INSERT INTO `recruit_job` VALUES ('6', 'JTFW', '123', '集团服务部', '6');
+INSERT INTO `recruit_job` VALUES ('7', 'YYSSY', '123', '运营商事业部', '7');
+INSERT INTO `recruit_job` VALUES ('8', 'DLSY', '123', '电力事业部', '8');
+INSERT INTO `recruit_job` VALUES ('9', 'JTSY', '123', '交通事业部', '9');
+INSERT INTO `recruit_job` VALUES ('10', 'JRSY', '123', '金融事业部', '10');
+INSERT INTO `recruit_job` VALUES ('11', 'YLSY', '123', '医疗事业部', '11');
+INSERT INTO `recruit_job` VALUES ('12', 'SC', '123', '市场部', '12');
+INSERT INTO `recruit_job` VALUES ('13', 'JG', '123', '结构部', '13');
+INSERT INTO `recruit_job` VALUES ('14', 'YJ', '123', '硬件部', '14');
+INSERT INTO `recruit_job` VALUES ('15', 'YYRJKF', '123', '应用软件开发部', '15');
+INSERT INTO `recruit_job` VALUES ('16', 'HCYF', '123', '耗材研发部', '16');
 
 -- ----------------------------
 -- Table structure for recruit_result
@@ -510,6 +538,7 @@ CREATE TABLE `recruit_user` (
   `user_name` varchar(10) NOT NULL,
   `user_card` varchar(30) NOT NULL,
   `user_status` varchar(10) default '0',
+  `recruit_status` varchar(10) default '0',
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `card_key` USING HASH (`user_card`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -517,8 +546,8 @@ CREATE TABLE `recruit_user` (
 -- ----------------------------
 -- Records of recruit_user
 -- ----------------------------
-INSERT INTO `recruit_user` VALUES ('57bb2af9-72be-4dc2-89c4-ff2ab96f2576', '陈帅', 'L2323994483', '0');
-INSERT INTO `recruit_user` VALUES ('7f317809-c6fd-41da-be55-a59863553a65', 'lql', '1', '0');
+# INSERT INTO `recruit_user` VALUES ('57bb2af9-72be-4dc2-89c4-ff2ab96f2576', '陈帅', 'L2323994483', '0');
+INSERT INTO `recruit_user` VALUES ('7f317809-c6fd-41da-be55-a59863553a65', 'lql', '0', '0', '1');
 
 -- ----------------------------
 -- Table structure for sale_answer
@@ -571,14 +600,7 @@ CREATE TABLE `second_try` (
 -- ----------------------------
 -- Records of second_try
 -- ----------------------------
-INSERT INTO `second_try` VALUES ('1', '1', '1', '1');
-INSERT INTO `second_try` VALUES ('3dd08c0c-89a0-47e2-af39-ff2ffe89cf47', 'd9070035-ddb8-490c-904b-ac43371d81f3', '不可以', 'no');
-INSERT INTO `second_try` VALUES ('6ae63585-629f-4ea0-86dc-ed910096d045', '8cea9902-6625-4973-bfdd-94ea92efe9b2', null, null);
-INSERT INTO `second_try` VALUES ('a1d858ee-ddd8-44db-a40a-c14cb6e4bb47', '7fc0a54c-d84b-4b65-8cf6-330fb1b3fc60', null, null);
-INSERT INTO `second_try` VALUES ('a46e717b-aba5-4d78-9cd4-877653edfaa3', '575e0701-721f-4d4a-8ebf-57c84f7aaefc', '小伙子不错', '通过');
-INSERT INTO `second_try` VALUES ('c41aa752-af01-44f2-9dc2-09f8ab988010', '5e947ccc-b796-4e54-a0fc-03f135cb13e1', 'he is a good person', 'no');
-INSERT INTO `second_try` VALUES ('e8a74979-85b5-4c4d-a692-ec352ea49ba8', 'db24f4b0-175a-4800-9e57-bbe6c63800aa', null, null);
-INSERT INTO `second_try` VALUES ('ecd564cb-fd9f-4cc4-a496-6423b00d101f', '624429d4-daf8-4a1b-979d-41cd32c62fd6', null, null);
+# INSERT INTO `second_try` VALUES ('1', '1', '1', '1');
 
 -- ----------------------------
 -- Table structure for teach
@@ -608,8 +630,8 @@ CREATE TABLE `work` (
   `begandend` varchar(50) default NULL,
   `comname` varchar(100) default NULL,
   `peoplenum` varchar(10) default NULL,
-  `post` varchar(50) default NULL,
-  `money` varchar(10) default NULL,
+  `w_post` varchar(50) default NULL,
+  `w_money` varchar(10) default NULL,
   `why` varchar(100) default NULL,
   `witness` varchar(100) default NULL,
   `user_id` varchar(50) default NULL,

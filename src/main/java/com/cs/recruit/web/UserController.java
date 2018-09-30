@@ -42,31 +42,56 @@ public class UserController {
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     public @ResponseBody ResponseData login(HttpServletRequest request, User user) {
         String token1 = request.getParameter("token");
+        System.out.println("------------------------token from httpRequest-----------------------");
         System.out.println(token1);
-        if (userService.findByUserAndCard(user) != null) {
+        System.out.println(userService.findByUserAndCard(user));
+
+        if (userService.findByUser(user) != null) {
             ResponseData responseData = ResponseData.ok();
-            responseData.putDataValue("user", userService.findByUserAndCard(user));
-            String token = JWT.sign(userService.findByUserAndCard(user), 30L * 24L * 3600L * 1000L);
-            if (token != null) {
-                responseData.putDataValue("token", token);
-            }
-            return responseData;
-        } else {
-            user.setUser_id(UUID.randomUUID().toString());
-            user.setUser_status("0");
-            int b = userService.insert(user);
-            if (b > 0) {
-                ResponseData responseData = ResponseData.ok();
-                responseData.putDataValue("user", user);
-                String token = JWT.sign(user, 30L * 24L * 3600L * 1000L);
+
+            if (userService.findByUserAndCard(user) != null) {
+
+                System.out.println("------------------------in login success----------------------------- ");
+                responseData.putDataValue("user", userService.findByUserAndCard(user));
+                String token = JWT.sign(userService.findByUserAndCard(user), 30L * 24L * 3600L * 1000L);
                 if (token != null) {
                     responseData.putDataValue("token", token);
                 }
                 return responseData;
+            } else {
+
+                System.out.println("------------------------in login fail----------------------------- ");
+                responseData.putDataValue("user", userService.findByUserAndCard(user));
+                return responseData;
+
             }
+        } else {
+            System.out.println("------------------------in register success -----------------------");
+
+            user.setUser_id(UUID.randomUUID().toString());
+            System.out.println(user.getUser_id());
+            user.setUser_status("0");
+            user.setRecruit_status("1");
+            int b = userService.insert(user);
+            System.out.println("--------------------------------user ---------------------------");
+            ResponseData responseData = ResponseData.ok();
+            String token = JWT.sign(user, 30L * 24L * 3600L * 1000L);
+            if (token != null) {
+                responseData.putDataValue("token", token);
+            }
+            if (b > 0) {
+                responseData.putDataValue("user", user);
+
+                return responseData;
+            } else {
+                return  responseData;
+            }
+
         }
-       return ResponseData.serverInternalError();
+
+//       return ResponseData.serverInternalError();
     }
+
     @RequestMapping(value = "/findApply",produces = "application/json;charset=utf-8")
     public @ResponseBody Apply findApply(HttpServletRequest request){
         String token = request.getParameter("token");
@@ -81,6 +106,7 @@ public class UserController {
             String user_id = user.getUser_id();
             apply.setUser_id(user_id);
             apply.setApply_id(UUID.randomUUID().toString());
+            interviewService.updateApplyRecruStatus(user_id);
             return interviewService.insertIntoApply(apply);
         }else {
             String user_id = user.getUser_id();
@@ -102,6 +128,7 @@ public class UserController {
             String user_id = user.getUser_id();
             base.setUser_id(user_id);
             base.setBase_id(UUID.randomUUID().toString());
+            interviewService.updateBaseRecruStatus(user_id);
             return interviewService.insertIntoBase(base);
         }else {
             String user_id = user.getUser_id();
@@ -136,8 +163,13 @@ public class UserController {
             teaches.add(teach);
         }
         for (Teach teach:teaches){
+
+            if (interviewService.selectRecruStatus(user_id).equals("1.2")) {
+                interviewService.updateTeachRecruStatus(user_id);
+            }
             Integer n = interviewService.insertIntoTeach(teach);
             num.add(n);
+
         }
         return num;
     }
@@ -147,22 +179,20 @@ public class UserController {
         User user = JWT.unsign(token,User.class);
         return interviewService.selectWork(user);
     }
-    @RequestMapping(value = "/findFamily",produces = "application/json;charset=utf-8")
-    public @ResponseBody List<Family> findFamily(HttpServletRequest request){
-        String token = request.getParameter("token");
-        User user = JWT.unsign(token,User.class);
-        return interviewService.selectFamily(user);
-    }
+
     @RequestMapping(value = "/updateWork",produces = "application/json;charset=utf-8")
     public @ResponseBody List<Integer> insertWork(HttpServletRequest request){
         List<Integer> num = new ArrayList<Integer>();
         String token = request.getParameter("token");
+        System.out.println("-----------------------------updateWork-----------------------");
         String json = request.getParameter("works");
+        System.out.println("---------------------------json:" + json);
         User user = JWT.unsign(token,User.class);
+        System.out.println(user.toString());
         interviewService.deleteWork(user);
         String user_id = user.getUser_id();
         JSONArray jsonArray = JSONArray.parseArray(json);
-        System.out.println(jsonArray.toArray().toString()+"ssssssssssssssssssssssssssssssssssssssssssssss");
+        System.out.println(jsonArray + "ssssssssssssssssssssssssssssssssssssssssssssss");
         ArrayList<Work> works = new ArrayList<Work>();
         for (int i = 0; i < jsonArray.size(); i++){
             Work work = new Work();
@@ -178,11 +208,22 @@ public class UserController {
             works.add(work);
         }
         for (Work work:works){
+            if (interviewService.selectRecruStatus(user_id).equals("1.4")) {
+                interviewService.updateWorkRecruStatus(user_id);
+            }
             Integer n = interviewService.insertIntoWork(work);
             num.add(n);
         }
         return num;
     }
+
+    @RequestMapping(value = "/findFamily",produces = "application/json;charset=utf-8")
+    public @ResponseBody List<Family> findFamily(HttpServletRequest request){
+        String token = request.getParameter("token");
+        User user = JWT.unsign(token,User.class);
+        return interviewService.selectFamily(user);
+    }
+
     @RequestMapping(value = "/updateFamily",produces = "application/json;charset=utf-8")
     public @ResponseBody List<Integer> insertFamily(HttpServletRequest request){
         List<Integer> num = new ArrayList<Integer>();
@@ -205,7 +246,11 @@ public class UserController {
             family.setAddress(jsonArray.getJSONObject(i).getString("address"));
             families.add(family);
         }
+
         for (Family family:families){
+            if (interviewService.selectRecruStatus(user_id).equals("1.3")) {
+                interviewService.updateFamilyRecruStatus(user_id);
+            }
             Integer n = interviewService.insertIntoFamily(family);
             num.add(n);
         }
@@ -242,6 +287,7 @@ public class UserController {
         assistent_answer.setUser_id(user_id);
         assistent_answer.setAssans_id(UUID.randomUUID().toString());
         System.out.println(assistent_answer);
+        interviewService.updateWriteRecruStatus(user_id);
         return interviewService.insertInotAss(assistent_answer);
     }
     @RequestMapping(value = "/updateAssAnswer",produces = "application/json;charset=utf-8")
@@ -259,6 +305,7 @@ public class UserController {
         String user_id = user.getUser_id();
         sale_answer.setUser_id(user_id);
         sale_answer.setSaleans_id(UUID.randomUUID().toString());
+        interviewService.updateWriteRecruStatus(user_id);
         return interviewService.insertInotSale(sale_answer);
     }
     @RequestMapping(value = "/updateSaleAnswer",produces = "application/json;charset=utf-8")
@@ -276,6 +323,7 @@ public class UserController {
         String user_id = user.getUser_id();
         other_answer.setUser_id(user_id);
         other_answer.setOthans_id(UUID.randomUUID().toString());
+        interviewService.updateWriteRecruStatus(user_id);
         return interviewService.insertInotOther(other_answer);
     }
     @RequestMapping(value = "/updateOtherAnswer",produces = "application/json;charset=utf-8")
@@ -396,6 +444,7 @@ public class UserController {
         }
         return num;
     }
+    //插入TF类型答案
     @RequestMapping(value = "/insertTF",produces = "aoolication/json;charset=utf-8")
     public @ResponseBody List<Integer> insertTF(HttpServletRequest request){
         List<Integer> num = new ArrayList<Integer>();
@@ -473,42 +522,49 @@ public class UserController {
         User user = JWT.unsign(token,User.class);
         return interviewService.SumE(user);
     }
+    //查找I类型分数
     @RequestMapping(value = "/findI",produces = "application/json;charset=utf-8")
     public @ResponseBody String findI(HttpServletRequest request){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
         return interviewService.SumI(user);
     }
+    //查找J类型分数
     @RequestMapping(value = "/findJ",produces = "application/json;charset=utf-8")
     public @ResponseBody String findJ(HttpServletRequest request){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
         return interviewService.SumJ(user);
     }
+    //查找P类型分数
     @RequestMapping(value = "/findP",produces = "application/json;charset=utf-8")
     public @ResponseBody String findP(HttpServletRequest request){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
         return interviewService.SumP(user);
     }
+    //查找S类型分数
     @RequestMapping(value = "/findS",produces = "application/json;charset=utf-8")
     public @ResponseBody String findS(HttpServletRequest request){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
         return interviewService.SumS(user);
     }
+    //查找N类型分数
     @RequestMapping(value = "/findN",produces = "application/json;charset=utf-8")
     public @ResponseBody String findN(HttpServletRequest request){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
         return interviewService.SumN(user);
     }
+    //查找T类型分数
     @RequestMapping(value = "/findT",produces = "application/json;charset=utf-8")
     public @ResponseBody String findT(HttpServletRequest request){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
         return interviewService.SumT(user);
     }
+    //查找F类型分数
     @RequestMapping(value = "/findF",produces = "application/json;charset=utf-8")
     public @ResponseBody String findF(HttpServletRequest request){
         String token = request.getParameter("token");
@@ -524,6 +580,20 @@ public class UserController {
         String user_id = user.getUser_id();
         result.setUser_id(user_id);
         result.setResult_id(UUID.randomUUID().toString());
+        interviewService.updateResultRecruStatus(user_id);
         return interviewService.insertResult(result);
+    }
+
+    //查看应聘者是否填写完简历
+    @RequestMapping(value = "/selectResume", produces = "application/json;charset=utf-8")
+    public @ResponseBody ResponseData selectResume(String user_id) {
+        ResponseData responseData = ResponseData.ok();
+        responseData.putDataValue("progress", interviewService.selectResume(user_id));
+        if (interviewService.selectResume(user_id) < 2) {
+            responseData.putDataValue("msg", "未完成");
+        } else{
+            responseData.putDataValue("msg", "已完成");
+        }
+        return responseData;
     }
 }
