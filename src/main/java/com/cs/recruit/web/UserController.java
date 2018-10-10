@@ -208,7 +208,7 @@ public class UserController {
             works.add(work);
         }
         for (Work work:works){
-            if (interviewService.selectRecruStatus(user_id).equals("1.4")) {
+            if (interviewService.selectRecruStatus(user_id).equals("1.3")) {
                 interviewService.updateWorkRecruStatus(user_id);
             }
             Integer n = interviewService.insertIntoWork(work);
@@ -248,7 +248,7 @@ public class UserController {
         }
 
         for (Family family:families){
-            if (interviewService.selectRecruStatus(user_id).equals("1.3")) {
+            if (interviewService.selectRecruStatus(user_id).equals("1.4")) {
                 interviewService.updateFamilyRecruStatus(user_id);
             }
             Integer n = interviewService.insertIntoFamily(family);

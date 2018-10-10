@@ -188,7 +188,7 @@
     </insert>
     <!--更新申请状态 work-->
     <update id="updateWorkRecruStatus" parameterType="String">
-        UPDATE recruit_user SET recruit_status = '1.5' WHERE user_id = #{user_id}
+        UPDATE recruit_user SET recruit_status = '1.4' WHERE user_id = #{user_id}
     </update>
     <update id="updateWork" parameterType="com.cs.recruit.entity.Work">
         UPDATE work SET begandend=#{begandend},comname=#{comname},peoplenum=#{peoplenum},post=#{post},money=#{money},why=#{why},witness=#{witness}
@@ -215,7 +215,7 @@
     </insert>
     <!--更新申请状态 family-->
     <update id="updateFamilyRecruStatus" parameterType="String">
-        UPDATE recruit_user SET recruit_status = '1.4' WHERE user_id = #{user_id}
+        UPDATE recruit_user SET recruit_status = '1.5' WHERE user_id = #{user_id}
     </update>
     <update id="updateFamily" parameterType="com.cs.recruit.entity.Family">
         UPDATE family SET status=#{status},relay=#{relay},name=#{name},address=#{address},post=#{post},phone=#{phone}
