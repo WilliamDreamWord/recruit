@@ -126,6 +126,9 @@ public class UserController {
         User user = JWT.unsign(token,User.class);
         if (interviewService.selectBase(user) == null){
             String user_id = user.getUser_id();
+            String post = interviewService.findPost(user);
+            if ("商务助理".equals(post) || "区域销售".equals(post))
+                base.setDept_id("7");
             base.setUser_id(user_id);
             base.setBase_id(UUID.randomUUID().toString());
             interviewService.updateBaseRecruStatus(user_id);

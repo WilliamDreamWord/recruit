@@ -21,7 +21,7 @@ public class WordUtils {
     private static Configuration configuration = null;
     //这里注意是利用WordUtils的类加载动态获得模板文件的位置
 //    private static final String templateFolder = WordUtils.class.getClassLoader().getResource("../../").getPath() + "WEB-INF/templates/";
-    private static final String templateFolder = "E:/IDEA/recruit/src/main/webapp/WEB-INF/templetes";
+    private static final String templateFolder = "/Users/mac/Desktop/招聘/项目源码/recruit/src/main/webapp/WEB-INF/templates/";
     static {
         configuration = new Configuration();
         configuration.setDefaultEncoding("utf-8");

@@ -38,7 +38,7 @@ public class FileController {
     @RequestMapping(value = "/filedDownload")
     public @ResponseBody void fileDownload(HttpServletResponse response){
         User user = new User();
-        user.setUser_id("57bb2af9-72be-4dc2-89c4-ff2ab96f2576");
+        user.setUser_id("7f317809-c6fd-41da-be55-a59863553a65");
         Calendar calendar = Calendar.getInstance();//获取当前日期
         if (user != null){
             Apply apply = interviewService.selectApply(user);
@@ -51,6 +51,7 @@ public class FileController {
             System.out.println(workList);
             List<Family> familyList = interviewService.selectFamily(user);
             System.out.println(familyList);
+
             Map<String ,Object> map = new HashMap<String ,Object>();
             map.put("post",apply.getPost()!=null?apply.getPost():"无");
             map.put("money",apply.getMoney()!=null?apply.getMoney():"无");
@@ -96,7 +97,7 @@ public class FileController {
                 map.put("phone3"+(i+1),familyList.get(i).getPhone()!=null?familyList.get(i).getPhone():"无");
             }
             try {
-                WordUtils.exportMillCertificateWord(response,map,"简历","tempalte.ftl");
+                WordUtils.exportMillCertificateWord(response,map,"简历","template.ftl");
             }catch (IOException e){
                 e.printStackTrace();
             }
