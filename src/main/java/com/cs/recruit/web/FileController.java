@@ -41,16 +41,17 @@ public class FileController {
         user.setUser_id("7f317809-c6fd-41da-be55-a59863553a65");
         Calendar calendar = Calendar.getInstance();//获取当前日期
         if (user != null){
+            System.out.println("-------------------------fileDownload---------------------");
             Apply apply = interviewService.selectApply(user);
-            System.out.println(apply);
+            System.out.println(apply.toString());
             Base base = interviewService.selectBase(user);
-            System.out.println(base);
+            System.out.println(base.toString() + "-----------------base-----------------");
             List<Teach> teachList = interviewService.selectTeach(user);
-            System.out.println(teachList);
+            System.out.println(teachList.toString() + "--------------teach-------------------");
             List<Work> workList = interviewService.selectWork(user);
-            System.out.println(workList);
+            System.out.println(workList.toString() + "------------------work---------------");
             List<Family> familyList = interviewService.selectFamily(user);
-            System.out.println(familyList);
+            System.out.println(familyList.toString() + "-------------------family-------------------");
 
             Map<String ,Object> map = new HashMap<String ,Object>();
             map.put("post",apply.getPost()!=null?apply.getPost():"无");
