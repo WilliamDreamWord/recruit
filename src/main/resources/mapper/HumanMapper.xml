@@ -102,7 +102,7 @@
         SELECT apply_form.user_id FROM apply_form WHERE post = #{post}
     </select>
     <select id="findInterview" parameterType="String" resultMap="listDtoMap">
-        SELECT apply_form.post,apply_form.formdate,recruit_base.user_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
+        SELECT recruit_user.user_id,apply_form.post,apply_form.formdate,recruit_base.user_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
         FROM recruit_user,recruit_base,apply_form
         WHERE recruit_user.user_id = #{user_id}
         AND recruit_base.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.user_id = #{user_id})
@@ -111,7 +111,7 @@
         AND apply_form.identity IN ('0')
     </select>
     <select id="findStuInterview" parameterType="String" resultMap="listDtoMap">
-        SELECT apply_form.,post,apply_form.formdate,recruit_base.base_id,recruit_base..rale_name,recruit_base.phone,recruit_user..user_status
+        SELECT recruit_user.user_id,apply_form.post,apply_form.formdate,recruit_base.base_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
         FROM recruit_user,recruit_base,apply_form
         WHERE recruit_base.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.user_id = #{user_id})
         AND apply_form.user_id = (SELECT recruit_user.user_id FROM recruit_user WHERE recruit_user.user_id = #{user_id})
@@ -119,7 +119,7 @@
         AND apply_form.identity IN ('1')
     </select>
     <select id="findStuId" resultType="String">
-        SELECT apply_form..user_id FROM apply_form
+        SELECT apply_form.user_id FROM apply_form
     </select>
     <select id="findUserid" resultType="String">
         SELECT apply_form.user_id FROM apply_form WHERE post NOT IN ('商务助理','区域销售')
