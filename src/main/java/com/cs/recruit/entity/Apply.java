@@ -12,8 +12,18 @@ public class Apply {
     private String money; //期望月薪
     private String formdate; //填表日期
     private String comedate; //到岗日期
-    public String toString(){
-        return "[" + apply_id + " " + user_id + " " + post + " " + money + " " + formdate + " " + comedate + "]";
+
+    @Override
+    public String toString() {
+        return "Apply{" +
+                "apply_id='" + apply_id + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", post='" + post + '\'' +
+                ", identity='" + identity + '\'' +
+                ", money='" + money + '\'' +
+                ", formdate='" + formdate + '\'' +
+                ", comedate='" + comedate + '\'' +
+                '}';
     }
 
     public String getIdentity() {
