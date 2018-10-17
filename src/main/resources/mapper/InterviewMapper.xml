@@ -115,7 +115,7 @@
         SELECT * FROM apply_form WHERE user_id = #{user_id}
     </select>
     <insert id="insertIntoApply" parameterType="com.cs.recruit.entity.Apply">
-        INSERT INTO apply_form(apply_id, user_id, post, money, formdate, comedate) VALUES (#{apply_id},#{user_id},#{post},#{money},#{formdate},#{comedate});
+        INSERT INTO apply_form(apply_id, user_id, post, money, identity, formdate, comedate) VALUES (#{apply_id},#{user_id},#{post},#{money},#{identity},#{formdate},#{comedate});
     </insert>
     <!--更新申请状态 apply-->
     <update id="updateApplyRecruStatus" parameterType="String">
