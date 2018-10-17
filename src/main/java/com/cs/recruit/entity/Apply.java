@@ -8,11 +8,20 @@ public class Apply {
     private String apply_id; //应聘登记id
     private String user_id; //基本信息id
     private String post; //申请职位
+    private String identity; //应聘者身份
     private String money; //期望月薪
     private String formdate; //填表日期
     private String comedate; //到岗日期
     public String toString(){
         return "[" + apply_id + " " + user_id + " " + post + " " + money + " " + formdate + " " + comedate + "]";
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
     }
 
     public String getApply_id() {

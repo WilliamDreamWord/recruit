@@ -65,6 +65,11 @@ public class HumanController {
         System.out.println(post);
         return humanService.findInterview(post);
     }
+    //查看所有应届生
+    @RequestMapping(value = "/findStuInterview",produces = "application/json;charset=utf-8")
+    public @ResponseBody List<listDto> findStuInterview() {
+        return humanService.findStuInterview();
+    }
     //查看面试者详情
     @RequestMapping(value = "/findDetails",produces = "application/json;charset=utf-8")
     public @ResponseBody DetailsDto findDetails(User user){

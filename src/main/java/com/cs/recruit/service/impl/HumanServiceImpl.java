@@ -51,6 +51,22 @@ public class HumanServiceImpl implements HumanService {
 
     }
 
+    @Override
+    public List<listDto> findStuInterview() {
+        listDto listdto = new listDto();
+        List<listDto> listDtos = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
+
+        stringList = humanDao.findStuId();
+        for (String s:stringList) {
+            listdto = humanDao.findStuInterview(s);
+            listDtos.add(listdto);
+        }
+
+        return listDtos;
+    }
+
+
     public List<listDto> findInterviewno(){
         return humanDao.findInterviewno();
     }

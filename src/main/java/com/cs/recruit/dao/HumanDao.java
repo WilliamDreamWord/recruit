@@ -16,7 +16,9 @@ import java.util.List;
 public interface HumanDao {
     //查看应聘相应职位的面试者待录取
     public List<String> findUserId(String post);
+    public List<String> findStuId();
     public listDto findInterview(String user_id);
+    public listDto findStuInterview(String user_id);
     public List<String> findUserid();
 
     public List<listDto> findInterviewno();

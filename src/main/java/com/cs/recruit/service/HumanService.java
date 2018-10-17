@@ -16,6 +16,8 @@ import java.util.List;
 public interface HumanService {
     //查看应聘相应职位的面试者待录取
     public List<listDto> findInterview(String post);
+    //查看应届生
+    public List<listDto> findStuInterview();
     public List<listDto> findInterviewno();
     //查看面试者详情待录取
     public DetailsDto findDetails(User user);

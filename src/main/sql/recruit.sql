@@ -23,6 +23,7 @@ CREATE TABLE `apply_form` (
   `apply_id` varchar(50) NOT NULL,
   `post` varchar(10) default NULL,
   `money` varchar(10) default NULL,
+  `identity` varchar(10) default NULL,
   `formdate` varchar(10) default NULL,
   `comedate` varchar(10) default NULL,
   `user_id` varchar(50) default NULL,
@@ -32,8 +33,8 @@ CREATE TABLE `apply_form` (
 -- ----------------------------
 -- Records of apply_form
 -- ----------------------------
-INSERT INTO `apply_form` VALUES ('001aa489-4052-4d44-b6ef-a43c7c72bc1f', '应用软件开发部', '5000', '2018-09-07', '2018-09-07', '7f317809-c6fd-41da-be55-a59863553a65');
-
+INSERT INTO `apply_form` VALUES ('001aa489-4052-4d44-b6ef-a43c7c72bc1f', '软件工程师', '5000', '0', '2018-09-07', '2018-09-07', '7f317809-c6fd-41da-be55-a59863553a65');
+# identity字段表明应聘者身份，现阶段：（0:社招生；1:应届生）
 -- ----------------------------
 -- Table structure for assistent_answer
 -- ----------------------------
@@ -548,6 +549,14 @@ CREATE TABLE `recruit_user` (
 -- ----------------------------
 # INSERT INTO `recruit_user` VALUES ('57bb2af9-72be-4dc2-89c4-ff2ab96f2576', '陈帅', 'L2323994483', '0');
 INSERT INTO `recruit_user` VALUES ('7f317809-c6fd-41da-be55-a59863553a65', 'lql', '0', '0', '1');
+# 关于recruit_status的解释
+# 【apply_form表头（1.1）recruit_base基本信息（1.2）teach教育（1.3）work工作经历（1.4） family家庭状况（1.5） 】
+# 笔试(2)
+# 性格测试(3)
+# 一面人力面试（4）
+# 二面部门主管面试（5）
+# 部门主管审批（6）
+# 人力审批（7）
 
 -- ----------------------------
 -- Table structure for sale_answer
