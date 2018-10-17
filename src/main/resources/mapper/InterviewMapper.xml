@@ -122,7 +122,7 @@
         UPDATE recruit_user SET recruit_status = '1.1' WHERE user_id = #{user_id}
     </update>
     <update id="updateApply" parameterType="com.cs.recruit.entity.Apply">
-        UPDATE apply_form SET apply_form.post = #{post},apply_form.money = #{money}
+        UPDATE apply_form SET apply_form.post = #{post},apply_form.money = #{money},apply_form.identity = #{identity}
                              ,apply_form.formdate = #{formdate},apply_form.comedate = #{comedate}
         WHERE user_id = #{user_id}
     </update>
