@@ -481,6 +481,7 @@ public class UserController {
         User user = JWT.unsign(token,User.class);
         face.setUser_id(user.getUser_id());
         face.setFace_id(UUID.randomUUID().toString());
+        interviewService.updateResultRecruStatus(user.getUser_id());
         return interviewService.insertIntoFace(face);
     }
 
@@ -583,7 +584,6 @@ public class UserController {
         String user_id = user.getUser_id();
         result.setUser_id(user_id);
         result.setResult_id(UUID.randomUUID().toString());
-        interviewService.updateResultRecruStatus(user_id);
         return interviewService.insertResult(result);
     }
 

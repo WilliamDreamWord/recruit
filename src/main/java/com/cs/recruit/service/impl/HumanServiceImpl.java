@@ -44,7 +44,8 @@ public class HumanServiceImpl implements HumanService {
 
         for (String s:stringList) {
             listdto = humanDao.findInterview(s);
-            listDtos.add(listdto);
+            if(listdto != null)
+                listDtos.add(listdto);
         }
 
         return listDtos;
@@ -58,11 +59,14 @@ public class HumanServiceImpl implements HumanService {
         List<String> stringList = new ArrayList<>();
 
         stringList = humanDao.findStuId();
+        System.out.println(stringList.toString() + "stringList------------------------------");
         for (String s:stringList) {
             listdto = humanDao.findStuInterview(s);
-            listDtos.add(listdto);
+            if(listdto != null)
+                listDtos.add(listdto);
         }
 
+        System.out.println(listDtos.toString() + "----------------------------------");
         return listDtos;
     }
 

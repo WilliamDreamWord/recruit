@@ -12,6 +12,7 @@ public class FamilyDto {
     private String address;
     private String post;
     private String phone;
+
     public String toString(){
         return "[" + family_id + " " + status + " " + relay + " " + name + " " + address + " " + post + " " + phone + "]";
     }

@@ -69,7 +69,7 @@
         SELECT apply_form.post,apply_form.formdate,recruit_base.user_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
         FROM recruit_user,recruit_base,apply_form
         WHERE recruit_base.dept_id = #{dept_id}
-              AND apply_form.user_id = (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.dept_id = #{dept_id})
+              AND apply_form.user_id = any(SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.dept_id = #{dept_id})
               AND recruit_user.user_status IN ('1')
     </select>
     <!--查看个人简历详情-->
