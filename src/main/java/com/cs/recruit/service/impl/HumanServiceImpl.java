@@ -63,7 +63,7 @@ public class HumanServiceImpl implements HumanService {
         for (String s:stringList) {
             listdto = humanDao.findStuInterview(s);
             if(listdto != null)
-                listDtos.add(listdto);
+                listDtos.add( listdto);
         }
 
         System.out.println(listDtos.toString() + "----------------------------------");
