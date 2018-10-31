@@ -106,7 +106,7 @@
         FROM recruit_user,recruit_base,apply_form
         WHERE recruit_base.user_id = #{user_id}
         AND (apply_form.user_id = #{user_id} and apply_form.identity IN ('0'))
-		AND (recruit_user.user_id = #{user_id} and recruit_user.recruit_status IN ('3','4','5','6','7'))
+		AND (recruit_user.user_id = #{user_id} and recruit_user.recruit_status IN ('3','4','5','6','7') and recruit_user.user_status NOT IN ('-1'))
     </select>
     <select id="findStuInterview" parameterType="String" resultMap="listDtoMap">
         SELECT recruit_user.user_id,apply_form.post,apply_form.formdate,recruit_base.base_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status

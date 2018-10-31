@@ -67,10 +67,13 @@
     <!--manager查询本部门已通过面试者-->
     <select id="findInterview2" parameterType="String" resultMap="listDtoMap">
         SELECT apply_form.post,apply_form.formdate,recruit_base.user_id,recruit_base.rale_name,recruit_base.phone,recruit_user.user_status
-        FROM recruit_user,recruit_base,apply_form
-        WHERE recruit_base.dept_id = #{dept_id}
-              AND apply_form.user_id = any(SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.dept_id = #{dept_id})
-              AND recruit_user.user_status IN ('1')
+        FROM recruit_user
+				left outer join recruit_base on recruit_user.user_id = recruit_base.user_id
+				left outer join apply_form on recruit_user.user_id = apply_form.user_id
+				where recruit_base.dept_id = #{dept_id}
+				and apply_form.user_id = ANY(SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.dept_id = #{dept_id})
+				and recruit_user.user_id = ANY(select recruit_base.user_id from recruit_base where recruit_base.dept_id = #{dept_id})
+				and recruit_user.user_status not in ('0','-1')
     </select>
     <!--查看个人简历详情-->
     <select id="findDetails" parameterType="String" resultMap="Details">
