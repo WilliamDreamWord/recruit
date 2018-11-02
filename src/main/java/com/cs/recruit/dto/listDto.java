@@ -9,11 +9,30 @@ public class listDto {
     private String user_status;
     private String post;
     private String phone;
-    private String formdate;
+    private String dept_id;
 
-    public String toString(){
-        return "[" + user_id + " " + rale_name + " " + user_status + " " + post + " " + phone + " " + formdate + "]";
+    public String getDept_id() {
+        return dept_id;
     }
+
+    public void setDept_id(String dept_id) {
+        this.dept_id = dept_id;
+    }
+
+    @Override
+    public String toString() {
+        return "listDto{" +
+                "user_id='" + user_id + '\'' +
+                ", rale_name='" + rale_name + '\'' +
+                ", user_status='" + user_status + '\'' +
+                ", post='" + post + '\'' +
+                ", phone='" + phone + '\'' +
+                ", dept_id='" + dept_id + '\'' +
+                ", formdate='" + formdate + '\'' +
+                '}';
+    }
+
+    private String formdate;
 
     public String getUser_id() {
         return user_id;
