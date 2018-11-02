@@ -79,8 +79,8 @@ public class HumanController {
     }
     //进行部门分配
     @RequestMapping(value = "/DeptAllot",produces = "application/json;charset=utf-8")
-    public @ResponseBody int DeptAllot(String dept_id,User user){
-        String user_id = user.getUser_id();
+    public @ResponseBody int DeptAllot(String dept_id,String user_id){
+        System.out.println(user_id);
         HashMap hashMap = new HashMap();
         hashMap.put("user_id",user_id);
         hashMap.put("dept_id",dept_id);

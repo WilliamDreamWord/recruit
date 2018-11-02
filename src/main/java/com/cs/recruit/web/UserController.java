@@ -323,16 +323,20 @@ public class UserController {
     public @ResponseBody int insertOtherAnswer(HttpServletRequest request,Other_answer other_answer){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
+
         String user_id = user.getUser_id();
-        other_answer.setUser_id(user_id);
+        System.out.println(user_id);
+        other_answer.setUser_id(user.getUser_id());
         other_answer.setOthans_id(UUID.randomUUID().toString());
         interviewService.updateWriteRecruStatus(user_id);
         return interviewService.insertInotOther(other_answer);
+
     }
     @RequestMapping(value = "/updateOtherAnswer",produces = "application/json;charset=utf-8")
     public @ResponseBody int updateOtherAnswer(HttpServletRequest request,Other_answer other_answer){
         String token = request.getParameter("token");
         User user = JWT.unsign(token,User.class);
+        System.out.println(user.toString());
         String user_id = user.getUser_id();
         other_answer.setUser_id(user_id);
         return interviewService.updateOther(other_answer);

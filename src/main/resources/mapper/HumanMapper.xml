@@ -132,10 +132,9 @@
               AND family.user_id IN (SELECT recruit_base.user_id FROM recruit_base WHERE recruit_base.user_id = #{user_id})
     </select>
 
-
     <update id="updataDept" parameterType="String" >
         UPDATE recruit_base SET recruit_base.dept_id = #{dept_id}
-        WHERE recruit_base.user_id = #{User_id}
+        WHERE recruit_base.user_id = #{user_id}
     </update>
     <!--查询部门id-->
     <select id="selectDept" parameterType="String" resultType="String">

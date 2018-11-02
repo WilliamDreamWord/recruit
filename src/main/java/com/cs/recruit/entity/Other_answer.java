@@ -21,7 +21,7 @@ public class Other_answer {
         return user_id;
     }
 
-    public void setUser_id(String baser_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
@@ -40,5 +40,4 @@ public class Other_answer {
     public void setSecond_ans(String second_ans) {
         this.second_ans = second_ans;
     }
-
 }
